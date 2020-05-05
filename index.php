@@ -1,6 +1,2 @@
-<?php
-Arne je velkyyyyyyyyyyyy SEFINKO aj z notebooku ratatata
 
-
-
-blablablaa
+toto je moja brancha vy pucky
