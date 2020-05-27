@@ -23,7 +23,7 @@
             </button>
             <div class="collapse navbar-collapse mr-3" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="kyvadlo.php">Kyvadlo <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
@@ -35,7 +35,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="lietadlo.php">Lietadlo</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="prikazy.php">Príkazy</a>
                     </li>
                 </ul>
@@ -51,12 +51,12 @@
 </nav>
 
 <div class="container">
-    <div class="jumbotron">
-        <h1 class="display-4">Slovenská verzia</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-        <hr class="my-4">
+    <div class="row col-12">
+        <form action="prikazy.php">
 
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+
+
+        </form>
 
     </div>
 </div>

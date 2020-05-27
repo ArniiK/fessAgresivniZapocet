@@ -23,7 +23,7 @@
             </button>
             <div class="collapse navbar-collapse mr-3" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="kyvadlo.php">Kyvadlo <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">

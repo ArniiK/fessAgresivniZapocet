@@ -17,31 +17,31 @@
 <nav>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="indexEn.php">Domov</a>
+            <a class="navbar-brand" href="indexEn.php">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse mr-3" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="kyvadloEN.php">Kyvadlo <span class="sr-only">(current)</span></a>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="kyvadloEN.php">Pendulum</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="gulickaEN.php">Gulička</a>
+                        <a class="nav-link" href="gulickaEN.php">Ball</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="tlmicEN.php">Tlmič</a>
+                        <a class="nav-link" href="tlmicEN.php">Suspension</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lietadloEN.php">Lietadlo</a>
+                        <a class="nav-link" href="lietadloEN.php">Plane</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="prikazyEN.php">Príkazy</a>
+                        <a class="nav-link" href="prikazyEN.php">Commands</a>
                     </li>
                 </ul>
 
-                <div class="row col-12">
-                    <a class="nav-link offset-6 btn btn-dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
+                <div class="row col-12 ml-4">
+                    <a class="nav-link offset-5 btn btn-dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link active btn btn-dark col-xs-2" href="indexEn.php"><i id="ukIcon"></i></a>
                 </div>
 
