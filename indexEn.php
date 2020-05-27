@@ -17,26 +17,26 @@
 <nav>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Domov</a>
+            <a class="navbar-brand" href="indexEn.php">Domov</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse mr-3" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item active">
-                        <a class="nav-link" href="kyvadlo">Kyvadlo <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="kyvadloEN.php">Kyvadlo <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="gulicka">Gulička</a>
+                        <a class="nav-link" href="gulickaEN.php">Gulička</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="tlmic">Tlmič</a>
+                        <a class="nav-link" href="tlmicEN.php">Tlmič</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lietadlo">Lietadlo</a>
+                        <a class="nav-link" href="lietadloEN.php">Lietadlo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="prikazy">Príkazy</a>
+                        <a class="nav-link" href="prikazyEN.php">Príkazy</a>
                     </li>
                 </ul>
 
@@ -52,7 +52,7 @@
 
 <div class="container">
     <div class="jumbotron">
-        <h1 class="display-4">Hello, world!</h1>
+        <h1 class="display-4">English version!</h1>
         <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
         <hr class="my-4">
 
