@@ -41,8 +41,8 @@
                 </ul>
 
                 <div class="row col-12 ml-4">
-                    <a class="nav-link offset-5 btn btn-dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
-                    <a class="nav-link active btn btn-dark col-xs-2" href="indexEn.php"><i id="ukIcon"></i></a>
+                    <a class="nav-link offset-5 btn btn-dark col-xs-2" href="prikazy.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link active btn btn-dark col-xs-2" href="prikazyEN.php"><i id="ukIcon"></i></a>
                 </div>
 
             </div>
@@ -50,27 +50,33 @@
     </div>
 </nav>
 
-<br><br>
-
 <div class="container">
 
-    <form action="prikazyEN.php" method="get">
-        <div class="form-group row">
-            <div class="col-md-10">
-                <label for="prikaz"><h2>Insert command</h2></label>
-                <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Command">
-                <small id="emailHelp" class="form-text text-muted">You can insert commands here</small>
-            </div>
-            <div class="col-1 mt-5">
-                <button type="submit" class="btn btn-outline-primary">Compilate</button>
-            </div>
-        </div>
-    </form>
-    <div class="form-group">
-        <label for="output"><h3>Output</h3></label>
+    <div class="jumbotron">
+
+        <h1 class="display-5">Commands</h1>
         <hr>
-        <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
+        <form action="prikazyEN.php" method="get">
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <label for="prikaz"><h2>Insert command</h2></label>
+                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Command">
+                    <small id="emailHelp" class="form-text text-muted">You can insert commands here</small>
+                </div>
+                <div class="col-1 mt-5">
+                    <button type="submit" class="btn btn-outline-primary">Compilate</button>
+                </div>
+            </div>
+        </form>
+        <div class="form-group">
+            <label for="output"><h3>Output</h3></label>
+            <hr>
+            <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
+        </div>
+
+
     </div>
+
 </div>
 
 

@@ -42,35 +42,41 @@
                 </ul>
 
                 <div class="row col-12">
-                    <a class="nav-link offset-6 active btn btn- dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
-                    <a class="nav-link btn btn-dark col-xs-2" href="indexEn.php"><i id="ukIcon"></i></a>
+                    <a class="nav-link offset-6 active btn btn- dark col-xs-2" href="prikazy.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link btn btn-dark col-xs-2" href="prikazyEN.php"><i id="ukIcon"></i></a>
                 </div>
 
             </div>
         </nav>
     </div>
 </nav>
-<br><br>
 
 <div class="container">
+    <div class="jumbotron">
 
-    <form action="prikazy.php" method="get">
-        <div class="form-group row">
-            <div class="col-md-10">
-                <label for="prikaz"><h2>Zadaj príkaz</h2></label>
-                <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Príkaz">
-                <small id="emailHelp" class="form-text text-muted">Sem môžete zadávať príkazy pre kompiláciu</small>
-            </div>
-            <div class="col-1 mt-5">
-                <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
-            </div>
-        </div>
-    </form>
-    <div class="form-group">
-        <label for="output"><h3>Output</h3></label>
+        <h1 class="display-5">Príkazy</h1>
         <hr>
-        <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
+        <form action="prikazy.php" method="get">
+            <div class="form-group form-row">
+                <div class="col-md-10">
+                    <label for="prikaz"><h2>Zadaj príkaz</h2></label>
+                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Príkaz">
+                    <small id="emailHelp" class="form-text text-muted">Sem môžete zadávať príkazy pre kompiláciu</small>
+                </div>
+                <div class="col-1 mt-5">
+                    <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
+                </div>
+            </div>
+        </form>
+        <div class="form-group">
+            <label for="output"><h3>Výsledok</h3></label>
+            <hr>
+            <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
+        </div>
+
+
     </div>
+
 </div>
 
 
