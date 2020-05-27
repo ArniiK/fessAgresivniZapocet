@@ -1,5 +1,6 @@
 <?php
 
+
 ?>
 
 <!doctype html>
@@ -41,7 +42,7 @@
                 </ul>
 
                 <div class="row col-12">
-                    <a class="nav-link offset-6 active btn btn-dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link offset-6 active btn btn- dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link btn btn-dark col-xs-2" href="indexEn.php"><i id="ukIcon"></i></a>
                 </div>
 
@@ -49,15 +50,26 @@
         </nav>
     </div>
 </nav>
+<br><br>
 
 <div class="container">
-    <div class="row col-12">
-        <form action="prikazy.php">
 
-
-
-        </form>
-
+    <form action="prikazy.php" method="get">
+        <div class="form-group row">
+            <div class="col-md-10">
+                <label for="prikaz"><h2>Zadaj príkaz</h2></label>
+                <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Príkaz">
+                <small id="emailHelp" class="form-text text-muted">Sem môžete zadávať príkazy pre kompiláciu</small>
+            </div>
+            <div class="col-1 mt-5">
+                <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+        <label for="output"><h3>Output</h3></label>
+        <hr>
+        <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
     </div>
 </div>
 
@@ -66,6 +78,7 @@
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 </body>
 </html>
