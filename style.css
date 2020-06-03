@@ -1,0 +1,13 @@
+#slovakiaIcon {
+    background-image: url("icons/slovakia.png");
+    height: 40px;
+    width: 40px;
+    display: block;
+}
+
+#ukIcon {
+    background-image: url("icons/uk.png");
+    height: 40px;
+    width: 40px;
+    display: block;
+}
