@@ -19,7 +19,7 @@
         echo "<script>
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8039/zFinal/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" . $_GET['prikaz'] . "',
+                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" . $_GET['prikaz'] . "',
                     success: function (msg) {
                         $(\"#output1\").html(msg);
                     }
