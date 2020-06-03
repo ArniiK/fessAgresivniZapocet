@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <?php
 
@@ -23,8 +24,28 @@
                     url: 'http://147.175.121.210:8039/zFinal/restApi.php/kyvadlo.txt?action=getDataKyvadlo&r=" . $_GET['R'] . "',
                     success: function (msg) {
                         $(\"#output1\").html(msg);
+                        console.log(msg);
+                        graf(msg);
                     }
-                });
+                });    
+           function graf(msg) {
+                var array=[];
+                for (var i=0;i<200;i++){
+                    array.push(i);
+                }
+               var trace1 = {
+                  x: array,
+                  y: msg,
+                  type: 'scatter'
+                };
+                
+                var data = [trace1];
+                
+                Plotly.newPlot('graphDiv', data);
+           }
+               
+            
+                        
 </script>";
 
     }
@@ -101,9 +122,12 @@
                     <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
                 </div>
 
+
             </div>
         </form>
+        <div class="col-12" id="graphDiv" style="width:600px;height:250px;">
 
+        </div>
 
     </div>
 </div>
@@ -115,5 +139,6 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+
 </body>
 </html>

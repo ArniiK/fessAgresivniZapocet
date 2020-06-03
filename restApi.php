@@ -1,4 +1,5 @@
 <?php
+
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
 //var_dump($method); echo("<br>");
@@ -6,8 +7,6 @@ $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 $input = json_decode(file_get_contents('php://input'), true);   // php://input - read raw data from the request body
 $key = array_shift($request) + 0;
 
-use Symfony\Component\Process\Exception\ProcessFailedException;
-use Symfony\Component\Process\Process;
 
 switch ($method) {
     case 'GET':
@@ -47,7 +46,7 @@ if ($method == 'GET') {
         case "getDataKyvadlo":
             $r = $_GET['r'];
 
-            
+
             $lastP = [0,0,0,0];
 
             $command = "M = .5;
@@ -71,14 +70,39 @@ if ($method == 'GET') {
                         [y,t,x]=lsim(sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
                         disp(x(:,1))
                         disp('endOfPos')
-                        disp(x(:,3))
-                        
+                        disp(x(:,3)) 
                         ";
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
+            $parts = preg_split('/\s+/', $output);
 
-            echo $output;
+//           var_dump($parts);
+            $pos=true;
+            $positions=[];
+            $angles=[];
+            $i=0;
 
+            foreach ($parts as $part){
+                if($part==="endOfPos"){
+                    $pos=false;
+                    $i=0;
+                    continue;
+                }
+                if ($pos){
+                    array_push($positions,doubleval($part));
+                    array_push($datapoints1,array("x" => $i, "y"=>doubleval($part)));
+
+                }else{
+                    array_push($angles,doubleval($part));
+                    array_push($datapoints2,array("x" => $i, "y"=>doubleval($part)));
+                }
+                $i++;
+            }
+            array_pop($angles);
+//            var_dump($parts);
+            var_dump($positions);
+
+//            var_dump($angles);
 
 
 
