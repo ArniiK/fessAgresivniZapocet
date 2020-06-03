@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
 //var_dump($method); echo("<br>");
@@ -100,12 +100,11 @@ if ($method == 'GET') {
             }
             array_pop($angles);
 //            var_dump($parts);
-            var_dump($positions);
+//            var_dump($positions);
 
-//            var_dump($angles);
+            $_SESSION['pos']= $positions;
 
-
-
+            $_SESSION['ang']= $angles;
 
 
 

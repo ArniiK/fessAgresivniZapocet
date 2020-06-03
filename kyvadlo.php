@@ -1,6 +1,9 @@
 <?php
+session_start();
 
 
+$positions = $_SESSION['pos'];
+$angles = $_SESSION['ang'];
 
 ?>
 
@@ -13,7 +16,6 @@
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"</script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <?php
 
@@ -24,28 +26,8 @@
                     url: 'http://147.175.121.210:8039/zFinal/restApi.php/kyvadlo.txt?action=getDataKyvadlo&r=" . $_GET['R'] . "',
                     success: function (msg) {
                         $(\"#output1\").html(msg);
-                        console.log(msg);
-                        graf(msg);
                     }
-                });    
-           function graf(msg) {
-                var array=[];
-                for (var i=0;i<200;i++){
-                    array.push(i);
-                }
-               var trace1 = {
-                  x: array,
-                  y: msg,
-                  type: 'scatter'
-                };
-                
-                var data = [trace1];
-                
-                Plotly.newPlot('graphDiv', data);
-           }
-               
-            
-                        
+                });           
 </script>";
 
     }
@@ -53,6 +35,7 @@
     ?>
 
     <title>Záverečný projekt</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
 <nav>
@@ -139,6 +122,72 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+<script>
+    var positions = <?=json_encode($positions)?>;
+    var angles = <?=json_encode($angles)?>;
 
+    var ypole = [];
+    for(var j=0;j<=200;j++){
+        ypole[j] = j;
+    }
+   var  trace1 = {
+        x: ypole[0],
+        y: positions[0],
+        type: 'scatter',
+        name: 'poloha kyvadla',
+        line: {
+            shape: 'spline',
+            smoothing: 1.3,
+            color: 'rgb(255, 98, 157)'
+        }
+    };
+
+   var  trace2 = {
+        x: ypole[0],
+        y: angles[0],
+        type: 'scatter',
+        name: 'uhol kyvadlovej tyče',
+        line: {
+            shape: 'spline',
+            smoothing: 1.3,
+            color: 'rgb(98, 157, 255)'
+        }
+    };
+
+
+    var data = [ trace1,trace2];
+
+    var layout = {
+        title:'Line and Scatter Plot',
+        xaxis: {
+            title: 'Čas',
+            range: [0,200]
+        },
+        yaxis: {
+            title: 'R',
+            range: [-0.05,0.25]
+        }
+    };
+
+    Plotly.newPlot(graphDiv, data, layout);
+    // for(var i=0;i<200;i++){
+    //     Plotly.en
+    //
+    // }
+    function rand() {
+        return Math.random();
+    }
+    var cnt = 0;
+    var interval = setInterval(function() {
+        Plotly.extendTraces(graphDiv, {
+            y: [[positions[cnt]], [angles[cnt]]]
+        }, [0, 1])
+
+        cnt = cnt+1;
+        if(cnt === 100) clearInterval(interval);
+    }, 500);
+
+
+</script>>
 </body>
 </html>
