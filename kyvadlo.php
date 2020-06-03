@@ -23,7 +23,7 @@ $angles = $_SESSION['ang'];
         echo "<script>
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8039/zFinal/restApi.php/kyvadlo.txt?action=getDataKyvadlo&r=" . $_GET['R'] . "',
+                    url: 'http://147.175.121.210:8039/zFinal/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "',
                     success: function (msg) {
                         $(\"#output1\").html(msg);
                     }
@@ -108,7 +108,7 @@ $angles = $_SESSION['ang'];
 
             </div>
         </form>
-        <div class="col-12" id="graphDiv" style="width:600px;height:250px;">
+        <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
 
         </div>
 
@@ -131,8 +131,8 @@ $angles = $_SESSION['ang'];
         ypole[j] = j;
     }
    var  trace1 = {
-        x: ypole[0],
-        y: positions[0],
+        x: [],
+        y: [],
         type: 'scatter',
         name: 'poloha kyvadla',
         line: {
@@ -143,8 +143,8 @@ $angles = $_SESSION['ang'];
     };
 
    var  trace2 = {
-        x: ypole[0],
-        y: angles[0],
+        x: [],
+        y: [],
         type: 'scatter',
         name: 'uhol kyvadlovej tyče',
         line: {
@@ -170,22 +170,23 @@ $angles = $_SESSION['ang'];
     };
 
     Plotly.newPlot(graphDiv, data, layout);
-    // for(var i=0;i<200;i++){
-    //     Plotly.en
-    //
-    // }
-    function rand() {
-        return Math.random();
-    }
-    var cnt = 0;
-    var interval = setInterval(function() {
-        Plotly.extendTraces(graphDiv, {
-            y: [[positions[cnt]], [angles[cnt]]]
-        }, [0, 1])
 
-        cnt = cnt+1;
-        if(cnt === 100) clearInterval(interval);
-    }, 500);
+    var cnt = 0;
+    var iterator = 1;
+    var interval = setInterval(function() {
+
+        var update = {
+            x: [[iterator], [iterator]],
+            y: [[positions[iterator]], [angles[iterator]]]
+        };
+
+
+        Plotly.extendTraces('graphDiv', update, [0,1]);
+        cnt++;
+        iterator++;
+
+        if(cnt === 200) clearInterval(interval);
+    }, 10);
 
 
 </script>>
