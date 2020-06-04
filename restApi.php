@@ -36,12 +36,6 @@ if ($method == 'GET') {
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
 
             echo $output;
-//            $cmd = "octave -qf --eval 'printf (\"%f\", " . $_GET['r'] . ");'";
-//            $output = exec ($cmd);
-//            var_dump ($output);
-
-
-
 
             break;
         case "getDataKyvadlo":
@@ -57,8 +51,6 @@ if ($method == 'GET') {
                     array_push($lastP, $lastPos);
                 }
             }
-
-
 
             $command = "M = .5;
                         m = 0.2;
@@ -88,63 +80,27 @@ if ($method == 'GET') {
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
             $oparray = preg_split('/\s+/', trim($output));
-//            $parts = preg_split('/\s+/', $output);
-//            var_dump($parts);
-//            echo json_encode($parts);
-//           var_dump($oparray[1]);
             $finalString="";
            foreach ($oparray as $entry){
                $finalString =$finalString . $entry . " ";
            }
            echo $finalString;
 
-
-
-
-//           var_dump($parts);
-//            $pos=true;
-//            $positions=[];
-//            $angles=[];
-//            $i=0;
-//
-//            foreach ($parts as $part){
-//                if($part==="endOfPos"){
-//                    $pos=false;
-//                    $i=0;
-//                    continue;
-//                }
-//                if ($pos){
-//                    array_push($positions,doubleval($part));
-//                    array_push($datapoints1,array("x" => $i, "y"=>doubleval($part)));
-//
-//                }else{
-//                    array_push($angles,doubleval($part));
-//                    array_push($datapoints2,array("x" => $i, "y"=>doubleval($part)));
-//                }
-//                $i++;
-//            }
-//            array_pop($angles);
-//            echo "kyvadlo";
-////            var_dump($parts);
-////            var_dump($positions);
-//
-//            $_SESSION['pos']= $positions;
-//
-//            $_SESSION['ang']= $angles;
-//
-//
-//
-
-
             break;
         case "getDataTlmic":
+            $lastP = [];
             $r = $_GET['r'];
-
-
-            $lastP = [0,0,0,0];
-
+            $last = $_GET['last'];
+            if ($last === '0')
+                $lastP = [0,0,0,0,0];
+            else {
+                $lastArr = preg_split('/:/', $last);
+                array_pop($lastArr);
+                foreach ($lastArr as $lastPos) {
+                    array_push($lastP, $lastPos);
+                }
+            }
             $command = "
-                        
                         m1 = 2500; m2 = 320;
                         k1 = 80000; k2 = 500000;
                         b1 = 350; b2 = 15020;
@@ -159,56 +115,36 @@ if ($method == 'GET') {
                         
                         t = 0:0.01:5;
                          r = " . $r . ";
-                        initX1=0;
-                        initX1d=0;
-                        initX2=0;
-                        initX2d=0;
-                        [y,t,x]=lsim(sys*[0;1],r*ones(size(t)),t,[initX1;initX1d;initX2;initX2d;0]);
+                        [y,t,x]=lsim(sys*[0;1],r*ones(size(t)),t,[". implode(",", $lastP) ."]);
                         disp(x(:,1))
                         disp('endOfPos')
                         disp(x(:,3)) 
+                        disp('endOfAng')
+                        disp(x(size(x,1),:))
                         ";
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
-            $parts = preg_split('/\s+/', $output);
-
-//           var_dump($parts);
-            $pos=true;
-            $positions=[];
-            $angles=[];
-            $i=0;
-
-            foreach ($parts as $part){
-                if($part==="endOfPos"){
-                    $pos=false;
-                    $i=0;
-                    continue;
-                }
-                if ($pos){
-                    array_push($positions,doubleval($part));
-                    //array_push($datapoints1,array("x" => $i, "y"=>doubleval($part)));
-
-                }else{
-                    array_push($angles,doubleval($part));
-                    //array_push($datapoints2,array("x" => $i, "y"=>doubleval($part)));
-                }
-                $i++;
+            $oparray = preg_split('/\s+/', trim($output));
+            $finalString="";
+            foreach ($oparray as $entry){
+                $finalString =$finalString . $entry . " ";
             }
-            array_pop($angles);
-            var_dump($angles);
-            var_dump($positions);
-
-
-            $_SESSION['pos']= $positions;
-
-            $_SESSION['ang']= $angles;
-
+            echo $finalString;
 
             break;
         case "getDataLietadlo":
-            $r = $_GET['prikaz'];
-
-            $lastP = [0,0,0,0];
+            $lastP = [];
+            $r = $_GET['r'];
+            $last = $_GET['last'];
+            if ($last === '0')
+                $lastP = [0,0,0];
+            else {
+                $lastArr = preg_split('/:/', $last);
+                array_pop($lastArr);
+                foreach ($lastArr as $lastPos) {
+                    array_push($lastP, $lastPos);
+                }
+            }
 
             $command = "A = [-0.313 56.7 0; -0.0139 -0.426 0; 0 56.7 0];
                         B = [0.232; 0.0203; 0];
@@ -220,49 +156,23 @@ if ($method == 'GET') {
                         sys = ss(A-B*K, B*N, C, D);
                         
                         t = 0:0.1:40;
-                        r = " . $r . ";
-                        initAlfa=0;
-                        initQ=0;
-                        initTheta=0;
-                        [y,t,x]=lsim(sys,r*ones(size(t)),t,[initAlfa;initQ;initTheta]);
+                        r = " . $r . ";                    
+                        [y,t,x]=lsim(sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
 
                         disp(x(:,3))
                         disp('endOfPos')
                         disp(r*ones(size(t))*N-x*K') 
+                        disp('endOfAng')
+                        disp(x(size(x,1),:))
                         ";
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
-            $parts = preg_split('/\s+/', $output);
-            var_dump($parts);
-            echo json_encode($parts);
-
-
-//            $pos=true;
-//            $positions=[];
-//            $angles=[];
-//            $i=0;
-//
-//            foreach ($parts as $part){
-//                if($part==="endOfPos"){
-//                    $pos=false;
-//                    $i=0;
-//                    continue;
-//                }
-//                if ($pos){
-//                    array_push($positions,doubleval($part));
-//
-//                }else{
-//                    array_push($angles,doubleval($part));
-//                }
-//                $i++;
-//            }
-//
-//            array_pop($angles);
-//
-//            $_SESSION['hello']= "kyvadlo";
-//            $_SESSION['pos']= $positions;
-//
-//            $_SESSION['ang']= $angles;
+            $oparray = preg_split('/\s+/', trim($output));
+            $finalString="";
+            foreach ($oparray as $entry){
+                $finalString =$finalString . $entry . " ";
+            }
+            echo $finalString;
             break;
 
     }

@@ -1,10 +1,11 @@
 <?php
+//
 //include 'inc/mysql_config.php';
-
-
-//if (isset($_GET['prikaz'])) {
+//
+//if (isset($_GET['R'])) {
 //    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
 //    $mysqli->query($sql);
+//
 //}
 
 ?>
@@ -31,9 +32,7 @@
                     type: 'GET',
                     url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
                     success: function (msg) {
-//                        $(\"#output1\").html(msg);
-                        handle(msg);  
-                        
+                        handle(msg);                  
                     }
                 });    
                         
@@ -90,7 +89,7 @@
                     var data = [ trace1,trace2];
                 
                     var layout = {
-                        title:'Line and Scatter Plot',
+                        title:'Prevrátené kyvadlo',
                         xaxis: {
                             title: 'Čas',
                             range: [0,200]
@@ -109,12 +108,6 @@
                     var cnt = 0;                    
                     var iterator = 1;
                     var interval = setInterval(function() {
-//                        if(positions[iterator] > 0.25) {
-//                            Plotly.relayout('graphDiv',
-//                            {
-//                                'yaxis.range': [-0.05, positions[iterator]+0.05]
-//                            })
-//                        }
                         var update = {
                             x: [[iterator], [iterator]],
                             y: [[positions[iterator]], [angles[iterator]]]
@@ -211,16 +204,12 @@
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
                 </div>
+
                 <div class="col-1 mt-5">
 
                     <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
                 </div>
-                <div id="output1" class="form-group">
-                    <label for="output"><h3>Výsledok</h3></label>
-                    <hr>
-                    <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
-
-                </div>
+            </div>
         </form>
         <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
 
