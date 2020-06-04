@@ -6,3 +6,4 @@ target/
 .project
 .factorypath
 .idea/workspace.xml
+inc/mysql_config.php
