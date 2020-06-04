@@ -39,15 +39,18 @@ if (isset($_GET['prikaz'])) {
                         <a class="nav-link" href="tlmic.php">Tlmič</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="lietadlo.php">Lietadlo</a>
+                        <a class="nav-link" href="lietadlo.php">Lietadlo</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="prikazy.php">Príkazy</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="statistika.php">Štatistika</a>
+                    </li>
                 </ul>
 
                 <div class="row col-12">
-                    <a class="nav-link offset-6 active btn btn-dark col-xs-2" href="lietadlo.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link offset-5 active btn btn-dark col-xs-2" href="lietadlo.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link btn btn-dark col-xs-2" href="lietadloEN.php"><i id="ukIcon"></i></a>
                 </div>
 
@@ -59,30 +62,9 @@ if (isset($_GET['prikaz'])) {
 <div class="container">
     <div class="jumbotron">
 
-        <h1 class="display-5">Gulička na tyči</h1>
+        <h1 class="display-5">Štatistika</h1>
         <hr>
-        <form action="lietadlo.php" method="get">
-            <div class="form-group form-row">
-                <div class="col-md-4">
-                    <label for="prikaz"><h3>Zadajte príkaz</h3></label>
-                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="R">
-                    <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
-                </div>
-                <div class="col-md-5 mt-5 ml-5">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-                        <label class="form-check-label" for="inlineCheckbox1">Graf</label>
-                    </div>
-                    <div class="form-check form-check-inline ml-5">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
-                        <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
-                    </div>
-                </div>
-                <div class="col-1 mt-5">
-                    <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
-                </div>
-            </div>
-        </form>
+
 
 
     </div>
