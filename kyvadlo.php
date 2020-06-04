@@ -1,10 +1,11 @@
 <?php
-include 'inc/mysql_config.php';
+//include 'inc/mysql_config.php';
 
-if (isset($_GET['prikaz'])) {
-    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
-    $mysqli->query($sql);
-}
+
+//if (isset($_GET['prikaz'])) {
+//    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
+//    $mysqli->query($sql);
+//}
 
 ?>
 
@@ -17,6 +18,135 @@ if (isset($_GET['prikaz'])) {
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <?php
+
+    if (isset($_GET['R'])) {
+
+        echo "<script>
+
+        lastPos = [];
+
+        $.ajax({
+                    type: 'GET',
+                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . " ',
+                    success: function (msg) {
+//                        $(\"#output1\").html(msg);
+                        handle(msg);  
+                        
+                    }
+                });    
+                        
+           function handle(msg) {
+                
+                var arr = msg.split(\" \");       
+                arr.pop();
+//                console.log(arr);
+                positions = [];
+                angles = [];
+                var pom=0;
+                for(var i=0;i<arr.length;i++){
+                    if(arr[i]==\"endOfPos\"){
+                        pom=1;
+                        continue;
+                    }else if(arr[i]==\"endOfAng\"){
+                        pom=2;
+                        continue;
+                    }
+                    if(pom==0){
+                        positions.push(arr[i]);
+                    }else if(pom==1){
+                        angles.push(arr[i]);
+                    }else{
+                        lastPos.push(arr[i]);
+                    }
+                } 
+                
+                $(document).ready(function() {
+                    var  trace1 = {
+                        x: [],
+                        y: [],
+                        type: 'scatter',
+                        name: 'poloha kyvadla',
+                        line: {
+                            shape: 'spline',
+                            smoothing: 1.3,
+                            color: 'rgb(255, 98, 157)'
+                        }
+                    };
+                
+                    var  trace2 = {
+                        x: [],
+                        y: [],
+                        type: 'scatter',
+                        name: 'uhol kyvadlovej tyče',
+                        line: {
+                            shape: 'spline',
+                            smoothing: 1.3,
+                            color: 'rgb(98, 157, 255)'
+                        }
+                    };
+                
+                
+                    var data = [ trace1,trace2];
+                
+                    var layout = {
+                        title:'Line and Scatter Plot',
+                        xaxis: {
+                            title: 'Čas',
+                            range: [0,200]
+                        },
+                        yaxis: {
+                            title: 'R',
+                            range: [-0.05,0.25]
+                        }
+                    };
+                    var config = {responsive: true};
+                
+                    Plotly.newPlot(graphDiv, data, layout,config);
+                    
+                    var cnt = 0;                    
+                    var iterator = 1;
+                    var interval = setInterval(function() {
+//                        if(positions[iterator] > 0.25) {
+//                            Plotly.relayout('graphDiv',
+//                            {
+//                                'yaxis.range': [-0.05, positions[iterator]+0.05]
+//                            })
+//                        }
+                        var update = {
+                            x: [[iterator], [iterator]],
+                            y: [[positions[iterator]], [angles[iterator]]]
+                        };
+            
+            
+                        Plotly.extendTraces('graphDiv', update, [0,1]);
+                        cnt++;
+                        iterator++;
+            
+                        if(cnt === 200) clearInterval(interval);
+                    }, 10);
+                    
+                    
+                    
+                });
+                
+    
+    
+    
+    
+    
+    
+           }             
+                        
+</script>";
+
+    }
+
+    ?>
+
     <title>Záverečný projekt</title>
 </head>
 <body>
@@ -82,10 +212,16 @@ if (isset($_GET['prikaz'])) {
 
                     <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
                 </div>
-                <div id="output1">
+                <div id="output1" class="form-group">
+                    <label for="output"><h3>Výsledok</h3></label>
+                    <hr>
+                    <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
 
                 </div>
         </form>
+        <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
+
+        </div>
 
 
     </div>
@@ -98,5 +234,6 @@ if (isset($_GET['prikaz'])) {
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+
 </body>
 </html>

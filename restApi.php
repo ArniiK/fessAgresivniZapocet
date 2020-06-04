@@ -71,12 +71,24 @@ if ($method == 'GET') {
                         disp(x(:,1))
                         disp('endOfPos')
                         disp(x(:,3)) 
+                        disp('endOfAng')
+                        disp(x(size(x,1),:))
                         ";
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
+            $oparray = preg_split('/\s+/', trim($output));
+//            $parts = preg_split('/\s+/', $output);
+//            var_dump($parts);
+//            echo json_encode($parts);
+//           var_dump($oparray[1]);
+            $finalString="";
+           foreach ($oparray as $entry){
+               $finalString =$finalString . $entry . " ";
+           }
+           echo $finalString;
 
-            $parts = preg_split('/\s+/', $output);
-            echo json_encode($parts);
+
+
 
 //           var_dump($parts);
 //            $pos=true;
