@@ -1,10 +1,18 @@
 <?php
-include 'config.php';
-if (isset($_GET['prikaz'])) {
-    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=4";
-    $mysqli->query($sql);
-}
+if (isset($_GET['R'])) {
+    session_start();
+    $positions = [];
+    $angles = [];
 
+    $positions = $_SESSION['pos'];
+    $angles = $_SESSION['ang'];
+}
+else{
+    $positions = [];
+    $angles = [];
+    $_SESSION['pos'] = [];
+    $_SESSION['ang'] = [];
+}
 ?>
 
 <!doctype html>
@@ -16,7 +24,27 @@ if (isset($_GET['prikaz'])) {
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <?php
+
+    if (isset($_GET['R'])) {
+        echo "<script>
+        $.ajax({
+                    type: 'GET',
+                    url: 'http://147.175.121.210:8038/skuska/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "',
+                    success: function (msg) {
+                        console.log(msg);
+                        $(\"#output1\").html(msg);
+                    }
+                });           
+</script>";
+
+    }
+
+    ?>
+
     <title>Záverečný projekt</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
 <nav>
@@ -58,13 +86,13 @@ if (isset($_GET['prikaz'])) {
 <div class="container">
     <div class="jumbotron">
 
-        <h1 class="display-5">Gulička na tyči</h1>
+        <h1 class="display-5">Náklon lietadla</h1>
         <hr>
         <form action="lietadlo.php" method="get">
             <div class="form-group form-row">
                 <div class="col-md-4">
                     <label for="prikaz"><h3>Zadajte príkaz</h3></label>
-                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="R">
+                    <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R" required>
                     <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
@@ -81,6 +109,13 @@ if (isset($_GET['prikaz'])) {
                     <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
                 </div>
             </div>
+
+            <label for="graphDiv"><h3>Výsledok</h3></label>
+            <br>
+            <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
+
+
+            </div>
         </form>
 
 
@@ -94,5 +129,83 @@ if (isset($_GET['prikaz'])) {
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+<script>
+    var positions = <?=json_encode($positions)?>;
+    var angles = <?=json_encode($angles)?>;
+
+    var ypole = [];
+    for(var j=0;j<=200;j++){
+        ypole[j] = j;
+    }
+    var  trace1 = {
+        x: [],
+        y: [],
+        type: 'scatter',
+        name: 'Náklon lietadla',
+        line: {
+            shape: 'spline',
+            smoothing: 1.3,
+            color: 'rgb(255,72,83)'
+        }
+    };
+
+    var  trace2 = {
+        x: [],
+        y: [],
+        type: 'scatter',
+        name: 'Náklon zadnej klapky',
+        line: {
+            shape: 'spline',
+            smoothing: 1.3,
+            color: 'rgb(128,255,103)'
+        }
+    };
+
+
+    var data = [ trace1,trace2];
+
+    var layout = {
+        title:'Náklon lietadla',
+        xaxis: {
+            title: 'Čas',
+            range: [0,200]
+        },
+        yaxis: {
+            title: 'Uhol v rad',
+            //range: [-<?=json_encode($_GET['R'])?>,<?=json_encode($_GET['R']*2)?>]
+            range: [<?=json_encode( "-0.4,0.4")?>]
+        },
+        legend:{
+            xanchor:"center",
+            yanchor:"top",
+            y:-0.3, // play with it
+            x:0.5   // play with it
+        }
+
+    };
+    var config = {responsive: true}
+
+
+    Plotly.newPlot(graphDiv, data, layout, config);
+
+    var cnt = 0;
+    var iterator = 1;
+    var interval = setInterval(function() {
+
+        var update = {
+            x: [[iterator], [iterator]],
+            y: [[positions[iterator]], [angles[iterator]]]
+        };
+
+
+        Plotly.extendTraces('graphDiv', update, [0,1]);
+        cnt++;
+        iterator++;
+
+        if(cnt === 200) clearInterval(interval);
+    }, 10);
+
+
+</script>>
 </body>
 </html>
