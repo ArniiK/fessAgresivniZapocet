@@ -1,4 +1,11 @@
 <?php
+include 'config.php';
+
+if (isset($_GET['prikaz'])) {
+    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
+    $mysqli->query($sql);
+}
+
 if (isset($_GET['R'])) {
     session_start();
     $positions = [];
@@ -92,7 +99,7 @@ else{
             <div class="form-group form-row">
                 <div class="col-md-4">
                     <label for="prikaz"><h3>Zadajte príkaz</h3></label>
-                    <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R" required>
+                    <input type="number" step="0.01" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="R" required>
                     <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
