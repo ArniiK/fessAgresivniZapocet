@@ -3,7 +3,7 @@
 ?>
 
 <!doctype html>
-<html lang="sk">
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,32 +17,32 @@
 <nav>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.php">Domov</a>
+            <a class="navbar-brand" href="indexEn.php">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse mr-3" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="kyvadlo.php">Kyvadlo <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="kyvadloEN.php">Pendulum</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="gulicka.php">Gulička</a>
+                        <a class="nav-link" href="gulickaEN.php">Ball</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="tlmic.php">Tlmič</a>
+                        <a class="nav-link" href="tlmicEN.php">Suspension</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lietadlo.php">Lietadlo</a>
+                        <a class="nav-link" href="lietadloEN.php">Plane</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="prikazy.php">Príkazy</a>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="prikazyEN.php">Commands</a>
                     </li>
                 </ul>
 
-                <div class="row col-12">
-                    <a class="nav-link offset-6 active btn btn-dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
-                    <a class="nav-link btn btn-dark col-xs-2" href="indexEn.php"><i id="ukIcon"></i></a>
+                <div class="row col-12 ml-4">
+                    <a class="nav-link offset-5 btn btn-dark col-xs-2" href="prikazy.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link active btn btn-dark col-xs-2" href="prikazyEN.php"><i id="ukIcon"></i></a>
                 </div>
 
             </div>
@@ -51,12 +51,29 @@
 </nav>
 
 <div class="container">
-    <div class="jumbotron">
-        <h1 class="display-4">Slovenská verzia</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-        <hr class="my-4">
 
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+    <div class="jumbotron">
+
+        <h1 class="display-5">Commands</h1>
+        <hr>
+        <form action="prikazyEN.php" method="get">
+            <div class="form-group row">
+                <div class="col-md-10">
+                    <label for="prikaz"><h2>Insert command</h2></label>
+                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Command">
+                    <small id="emailHelp" class="form-text text-muted">You can insert commands here</small>
+                </div>
+                <div class="col-1 mt-5">
+                    <button type="submit" class="btn btn-outline-primary">Compilate</button>
+                </div>
+            </div>
+        </form>
+        <div class="form-group">
+            <label for="output"><h3>Output</h3></label>
+            <hr>
+            <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
+        </div>
+
 
     </div>
 
