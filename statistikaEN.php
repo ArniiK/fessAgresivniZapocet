@@ -1,6 +1,7 @@
 <?php
 
-include 'config.php';
+include 'inc/mysql_config.php';
+
 
 ?>
 

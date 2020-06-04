@@ -74,41 +74,43 @@ if ($method == 'GET') {
                         ";
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
+
             $parts = preg_split('/\s+/', $output);
+            echo json_encode($parts);
 
 //           var_dump($parts);
-            $pos=true;
-            $positions=[];
-            $angles=[];
-            $i=0;
-
-            foreach ($parts as $part){
-                if($part==="endOfPos"){
-                    $pos=false;
-                    $i=0;
-                    continue;
-                }
-                if ($pos){
-                    array_push($positions,doubleval($part));
-                    array_push($datapoints1,array("x" => $i, "y"=>doubleval($part)));
-
-                }else{
-                    array_push($angles,doubleval($part));
-                    array_push($datapoints2,array("x" => $i, "y"=>doubleval($part)));
-                }
-                $i++;
-            }
-            array_pop($angles);
-            echo "kyvadlo";
-//            var_dump($parts);
-//            var_dump($positions);
-
-            $_SESSION['pos']= $positions;
-
-            $_SESSION['ang']= $angles;
-
-
-
+//            $pos=true;
+//            $positions=[];
+//            $angles=[];
+//            $i=0;
+//
+//            foreach ($parts as $part){
+//                if($part==="endOfPos"){
+//                    $pos=false;
+//                    $i=0;
+//                    continue;
+//                }
+//                if ($pos){
+//                    array_push($positions,doubleval($part));
+//                    array_push($datapoints1,array("x" => $i, "y"=>doubleval($part)));
+//
+//                }else{
+//                    array_push($angles,doubleval($part));
+//                    array_push($datapoints2,array("x" => $i, "y"=>doubleval($part)));
+//                }
+//                $i++;
+//            }
+//            array_pop($angles);
+//            echo "kyvadlo";
+////            var_dump($parts);
+////            var_dump($positions);
+//
+//            $_SESSION['pos']= $positions;
+//
+//            $_SESSION['ang']= $angles;
+//
+//
+//
 
 
             break;
@@ -181,7 +183,7 @@ if ($method == 'GET') {
 
             break;
         case "getDataLietadlo":
-            $r = $_GET['r'];
+            $r = $_GET['prikaz'];
 
 
             $lastP = [0,0,0,0];
@@ -209,34 +211,36 @@ if ($method == 'GET') {
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
             $parts = preg_split('/\s+/', $output);
-
             var_dump($parts);
-            $pos=true;
-            $positions=[];
-            $angles=[];
-            $i=0;
+            echo json_encode($parts);
 
-            foreach ($parts as $part){
-                if($part==="endOfPos"){
-                    $pos=false;
-                    $i=0;
-                    continue;
-                }
-                if ($pos){
-                    array_push($positions,doubleval($part));
 
-                }else{
-                    array_push($angles,doubleval($part));
-                }
-                $i++;
-            }
-
-            array_pop($angles);
-
-            $_SESSION['hello']= "kyvadlo";
-            $_SESSION['pos']= $positions;
-
-            $_SESSION['ang']= $angles;
+//            $pos=true;
+//            $positions=[];
+//            $angles=[];
+//            $i=0;
+//
+//            foreach ($parts as $part){
+//                if($part==="endOfPos"){
+//                    $pos=false;
+//                    $i=0;
+//                    continue;
+//                }
+//                if ($pos){
+//                    array_push($positions,doubleval($part));
+//
+//                }else{
+//                    array_push($angles,doubleval($part));
+//                }
+//                $i++;
+//            }
+//
+//            array_pop($angles);
+//
+//            $_SESSION['hello']= "kyvadlo";
+//            $_SESSION['pos']= $positions;
+//
+//            $_SESSION['ang']= $angles;
             break;
 
     }

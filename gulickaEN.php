@@ -1,6 +1,7 @@
 <?php
 
-include 'config.php';
+include 'inc/mysql_config.php';
+
 if (isset($_GET['prikaz'])) {
     $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=2";
     $mysqli->query($sql);

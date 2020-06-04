@@ -1,5 +1,5 @@
 <?php
-include 'config.php';
+include 'inc/mysql_config.php';
 
 if (isset($_GET['prikaz'])) {
     $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
@@ -59,7 +59,7 @@ if (isset($_GET['prikaz'])) {
 <div class="container">
     <div class="jumbotron">
 
-        <h1 class="display-5">Gulička na tyči</h1>
+        <h1 class="display-5">Kyvadlo</h1>
         <hr>
         <form action="kyvadlo.php" method="get">
             <div class="form-group form-row">

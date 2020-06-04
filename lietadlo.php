@@ -1,12 +1,13 @@
 <?php
-include 'config.php';
+include 'inc/mysql_config.php';
+
 
 if (isset($_GET['prikaz'])) {
     $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
     $mysqli->query($sql);
 }
 
-if (isset($_GET['R'])) {
+if (isset($_GET['prikaz'])) {
     session_start();
     $positions = [];
     $angles = [];
@@ -32,26 +33,22 @@ else{
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <?php
-
-    if (isset($_GET['R'])) {
-        echo "<script>
-        $.ajax({
-                    type: 'GET',
-                    url: 'http://147.175.121.210:8038/skuska/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "',
-                    success: function (msg) {
-                        console.log(msg);
-                        $(\"#output1\").html(msg);
-                    }
-                });           
-</script>";
-
-    }
-
-    ?>
-
-    <title>Záverečný projekt</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#run").click(function() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=' + <?= $_GET['prikaz']?>,
+                    success: function (msg) {
+                        alert(msg);
+                        console.log(msg);
+                    }
+                });
+            });
+        });
+    </script>
+    <title>Záverečný projekt</title>
 </head>
 <body>
 <nav>
@@ -113,7 +110,7 @@ else{
                     </div>
                 </div>
                 <div class="col-1 mt-5">
-                    <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
+                    <button type="submit" id="run" class="btn btn-outline-primary">Skompilovať</button>
                 </div>
             </div>
 
@@ -132,7 +129,6 @@ else{
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
