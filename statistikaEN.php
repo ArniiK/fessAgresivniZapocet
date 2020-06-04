@@ -1,15 +1,11 @@
 <?php
-include 'config.php';
 
-if (isset($_GET['prikaz'])) {
-    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=4";
-    $mysqli->query($sql);
-}
+include 'config.php';
 
 ?>
 
 <!doctype html>
-<html lang="sk">
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -23,35 +19,35 @@ if (isset($_GET['prikaz'])) {
 <nav>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="index.php">Domov</a>
+            <a class="navbar-brand" href="indexEn.php">Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse mr-3" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="kyvadlo.php">Kyvadlo <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="kyvadloEN.php">Pendulum</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="gulicka.php">Gulička</a>
+                        <a class="nav-link" href="gulickaEN.php">Ball</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="tlmic.php">Tlmič</a>
+                        <a class="nav-link" href="tlmicEN.php">Suspension</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="lietadlo.php">Lietadlo</a>
+                        <a class="nav-link" href="lietadloEN.php">Plane</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="prikazy.php">Príkazy</a>
+                        <a class="nav-link" href="prikazyEN.php">Commands</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="statistika.php">Štatistika</a>
+                        <a class="nav-link active" href="statistikaEN.php">Statistics</a>
                     </li>
                 </ul>
 
-                <div class="row col-12">
-                    <a class="nav-link offset-5 active btn btn-dark col-xs-2" href="statistika.php"><i id="slovakiaIcon"></i></a>
-                    <a class="nav-link btn btn-dark col-xs-2" href="statistikaEN.php"><i id="ukIcon"></i></a>
+                <div class="row col-12 ml-4">
+                    <a class="nav-link offset-4 btn btn-dark col-xs-2" href="statistika.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link active btn btn-dark col-xs-2" href="statistikaEN.php"><i id="ukIcon"></i></a>
                 </div>
 
             </div>
@@ -62,13 +58,13 @@ if (isset($_GET['prikaz'])) {
 <div class="container">
     <div class="jumbotron">
 
-        <h1 class="display-5">Štatistika</h1>
+        <h1 class="display-5">Statistics</h1>
         <hr>
         <table class="table">
             <thead class="thead-dark">
             <tr>
-                <th scope="col">Stránka</th>
-                <th scope="col">Počet návštev</th>
+                <th scope="col">Page</th>
+                <th scope="col">Visit counter</th>
             </tr>
             </thead>
             <tbody>
@@ -77,7 +73,7 @@ if (isset($_GET['prikaz'])) {
             $result = $mysqli->query($sql);
             while ($obj = $result->fetch_object()){
                 echo "<tr>";
-                echo "<td>$obj->meno</td>";
+                echo "<td>$obj->meno_EN</td>";
                 echo "<td>$obj->pristupy</td>";
                 echo "</tr>";
             }
