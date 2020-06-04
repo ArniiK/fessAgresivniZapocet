@@ -1,7 +1,6 @@
 <?php
 include 'inc/mysql_config.php';
 
-
 if (isset($_GET['prikaz'])) {
     $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
     $mysqli->query($sql);
@@ -34,20 +33,28 @@ else{
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $("#run").click(function() {
-                $.ajax({
+    <?php
+
+    if (isset($_GET['R'])) {
+        echo "<script>
+        $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=' + <?= $_GET['prikaz']?>,
+                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "',
                     success: function (msg) {
-                        alert(msg);
-                        console.log(msg);
+                        $(\"#output1\").html(msg);
+                        x(msg);
+                       
                     }
-                });
-            });
-        });
-    </script>
+                })
+                        function x(msg) {
+                            console.log('hello');
+                            console.log(msg);
+                        }
+</script>";
+
+    }
+
+    ?>
     <title>Záverečný projekt</title>
 </head>
 <body>
@@ -96,7 +103,7 @@ else{
             <div class="form-group form-row">
                 <div class="col-md-4">
                     <label for="prikaz"><h3>Zadajte príkaz</h3></label>
-                    <input type="number" step="0.01" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="R" required>
+                    <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R" required>
                     <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
@@ -110,9 +117,13 @@ else{
                     </div>
                 </div>
                 <div class="col-1 mt-5">
-                    <button type="submit" id="run" class="btn btn-outline-primary">Skompilovať</button>
+                    <button type="submit" id='run' class="btn btn-outline-primary">Skompilovať</button>
+                </div>
+                <div id="output1">
+
                 </div>
             </div>
+
 
             <label for="graphDiv"><h3>Výsledok</h3></label>
             <br>

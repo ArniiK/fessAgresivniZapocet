@@ -65,7 +65,7 @@ if (isset($_GET['prikaz'])) {
             <div class="form-group form-row">
                 <div class="col-md-4">
                     <label for="prikaz"><h3>Zadajte príkaz</h3></label>
-                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="R">
+                    <input type="text" class="form-control form-control-lg" name="R" id="R" placeholder="R">
                     <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
@@ -79,9 +79,12 @@ if (isset($_GET['prikaz'])) {
                     </div>
                 </div>
                 <div class="col-1 mt-5">
+
                     <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
                 </div>
-            </div>
+                <div id="output1">
+
+                </div>
         </form>
 
 

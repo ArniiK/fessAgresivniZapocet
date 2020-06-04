@@ -184,7 +184,7 @@ if ($method == 'GET') {
             break;
         case "getDataLietadlo":
             $r = $_GET['prikaz'];
-
+            echo 'HEYEYEYEYEY';
 
             $lastP = [0,0,0,0];
 

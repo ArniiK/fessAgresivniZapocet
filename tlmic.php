@@ -39,9 +39,8 @@ else{
         echo "<script>
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/kyvadlo?action=getDataTlmic&r=" . $_GET['R'] . "',
+                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataTlmic&r=" . $_GET['R'] . "',
                     success: function (msg) {
-                        $(\"#output1\").html(msg);
                         x(msg);
                        
                     }
@@ -121,6 +120,9 @@ else{
                 <div class="col-1 mt-5">
                     <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
                 </div>
+                <div id="output1">
+
+                </div>
 
                 </div>
                 <label for="graphDiv"><h3>Výsledok</h3></label>
@@ -135,7 +137,6 @@ else{
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
