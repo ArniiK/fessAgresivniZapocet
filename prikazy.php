@@ -1,5 +1,13 @@
 <?php
 
+include 'config.php';
+
+if (isset($_GET['prikaz'])) {
+    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=5";
+    $mysqli->query($sql);
+}
+
+
 
 ?>
 
@@ -60,7 +68,7 @@
             <div class="form-group form-row">
                 <div class="col-md-10">
                     <label for="prikaz"><h2>Zadaj príkaz</h2></label>
-                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Príkaz">
+                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="Príkaz" required>
                     <small id="emailHelp" class="form-text text-muted">Sem môžete zadávať príkazy pre kompiláciu</small>
                 </div>
                 <div class="col-1 mt-5">

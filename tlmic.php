@@ -1,6 +1,11 @@
 <?php
 
+include 'config.php';
+
 if (isset($_GET['R'])) {
+    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=3";
+    $mysqli->query($sql);
+
     session_start();
     $positions = [];
     $angles = [];
@@ -37,8 +42,14 @@ else{
                     url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/kyvadlo?action=getDataTlmic&r=" . $_GET['R'] . "',
                     success: function (msg) {
                         $(\"#output1\").html(msg);
+                        x(msg);
+                       
                     }
-                });           
+                })
+                        function x(msg) {
+                            console.log('hello');
+                            console.log(msg);
+                        }
 </script>";
 
     }
@@ -114,10 +125,7 @@ else{
                 </div>
                 <label for="graphDiv"><h3>Výsledok</h3></label>
                 <br>
-                <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
-
-
-                </div>
+                <div class="col-12" id="graphDiv" style="width: 100%;height:500px"></div>
         </form>
 
 
@@ -136,7 +144,7 @@ else{
     var angles = <?=json_encode($angles)?>;
 
     var ypole = [];
-    for(var j=0;j<=200;j++){
+    for(var j=0;j<=500;j++){
         ypole[j] = j;
     }
     var  trace1 = {
@@ -170,12 +178,18 @@ else{
         title:'Tlmič kolesa',
         xaxis: {
             title: 'Čas',
-            range: [0,200]
+            range: [0,500]
         },
         yaxis: {
             title: 'R',
-            //range: [-<?=json_encode($_GET['R'])?>,<?=json_encode($_GET['R']*2)?>]
-            range: [<?=json_encode( "-0.4,0.4")?>]
+            //range: [-<?=json_encode($_GET['R'])?>,<?=json_encode($_GET['R'] * 2)?>]
+            range: [<?=json_encode("-0.4,0.4")?>]
+        },
+        legend: {
+            xanchor: "center",
+            yanchor: "top",
+            y: -0.3,
+            x: 0.5
         }
     };
     var config = {responsive: true}
@@ -196,7 +210,7 @@ else{
         cnt++;
         iterator++;
 
-        if(cnt === 200) clearInterval(interval);
+        if(cnt === 500) clearInterval(interval);
     }, 10);
 
 

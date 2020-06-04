@@ -102,7 +102,7 @@ if ($method == 'GET') {
             echo "kyvadlo";
 //            var_dump($parts);
 //            var_dump($positions);
-            $_SESSION['hello']= "kyvadlo";
+
             $_SESSION['pos']= $positions;
 
             $_SESSION['ang']= $angles;
@@ -161,17 +161,17 @@ if ($method == 'GET') {
                 }
                 if ($pos){
                     array_push($positions,doubleval($part));
-                    array_push($datapoints1,array("x" => $i, "y"=>doubleval($part)));
+                    //array_push($datapoints1,array("x" => $i, "y"=>doubleval($part)));
 
                 }else{
                     array_push($angles,doubleval($part));
-                    array_push($datapoints2,array("x" => $i, "y"=>doubleval($part)));
+                    //array_push($datapoints2,array("x" => $i, "y"=>doubleval($part)));
                 }
                 $i++;
             }
             array_pop($angles);
-//            var_dump($parts);
-//            var_dump($positions);
+            var_dump($angles);
+            var_dump($positions);
 
 
             $_SESSION['pos']= $positions;
