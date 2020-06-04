@@ -27,11 +27,9 @@
 
         echo "<script>
 
-        lastPos = [];
-
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . " ',
+                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
                     success: function (msg) {
 //                        $(\"#output1\").html(msg);
                         handle(msg);  
@@ -40,10 +38,9 @@
                 });    
                         
            function handle(msg) {
-                
+                lastPos = [];    
                 var arr = msg.split(\" \");       
                 arr.pop();
-//                console.log(arr);
                 positions = [];
                 angles = [];
                 var pom=0;
@@ -89,7 +86,7 @@
                         }
                     };
                 
-                
+                    
                     var data = [ trace1,trace2];
                 
                     var layout = {
@@ -105,6 +102,8 @@
                     };
                     var config = {responsive: true};
                 
+                    
+                    
                     Plotly.newPlot(graphDiv, data, layout,config);
                     
                     var cnt = 0;                    
@@ -129,17 +128,20 @@
                         if(cnt === 200) clearInterval(interval);
                     }, 10);
                     
+                    var lastPositions = \"\";
+                    for (var i=0;i<lastPos.length;i++) {
+                        lastPositions = lastPositions + lastPos[i] + ':';
+                        console.log(lastPos[i]);
+                    }
+                    
+                    
+                    document.getElementById(\"last\").value = lastPositions;
+                     console.log('Last after: ' + document.getElementById(\"last\"));
                     
                     
                 });
-                
-    
-    
-    
-    
-    
-    
-           }             
+                            
+            } //konec handle             
                         
 </script>";
 
@@ -195,7 +197,7 @@
             <div class="form-group form-row">
                 <div class="col-md-4">
                     <label for="prikaz"><h3>Zadajte príkaz</h3></label>
-                    <input type="text" class="form-control form-control-lg" name="R" id="R" placeholder="R">
+                    <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R">
                     <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
@@ -207,6 +209,7 @@
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
+                    <input type="hidden" id="last" name="last" value="0">
                 </div>
                 <div class="col-1 mt-5">
 

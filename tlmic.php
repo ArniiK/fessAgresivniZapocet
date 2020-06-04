@@ -211,7 +211,7 @@ else{
         cnt++;
         iterator++;
 
-        if(cnt === 500) clearInterval(interval);
+        if(cnt === 200) clearInterval(interval);
     }, 10);
 
 

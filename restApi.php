@@ -1,5 +1,6 @@
 <?php
 session_start();
+error_reporting(0);
 // get the HTTP method, path and body of the request
 $method = $_SERVER['REQUEST_METHOD'];
 //var_dump($method); echo("<br>");
@@ -44,10 +45,20 @@ if ($method == 'GET') {
 
             break;
         case "getDataKyvadlo":
+            $lastP = [];
             $r = $_GET['r'];
+            $last = $_GET['last'];
+            if ($last === '0')
+                $lastP = [0,0,0,0];
+            else {
+                $lastArr = preg_split('/:/', $last);
+                array_pop($lastArr);
+                foreach ($lastArr as $lastPos) {
+                    array_push($lastP, $lastPos);
+                }
+            }
 
 
-            $lastP = [0,0,0,0];
 
             $command = "M = .5;
                         m = 0.2;
@@ -196,7 +207,6 @@ if ($method == 'GET') {
             break;
         case "getDataLietadlo":
             $r = $_GET['prikaz'];
-            echo 'HEYEYEYEYEY';
 
             $lastP = [0,0,0,0];
 
