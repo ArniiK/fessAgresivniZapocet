@@ -1,6 +1,9 @@
 <?php
+session_start();
 
 
+$positions = $_SESSION['pos'];
+$angles = $_SESSION['ang'];
 
 ?>
 
@@ -20,11 +23,11 @@
         echo "<script>
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8039/zFinal/restApi.php/kyvadlo.txt?action=getDataKyvadlo&r=" . $_GET['R'] . "',
+                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "',
                     success: function (msg) {
                         $(\"#output1\").html(msg);
                     }
-                });
+                });           
 </script>";
 
     }
@@ -32,6 +35,7 @@
     ?>
 
     <title>Záverečný projekt</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
 <nav>
@@ -101,9 +105,12 @@
                     <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
                 </div>
 
+
             </div>
         </form>
+        <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
 
+        </div>
 
     </div>
 </div>
@@ -115,5 +122,142 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+<script>
+    var positions = <?=json_encode($positions)?>;
+    var angles = <?=json_encode($angles)?>;
+
+    var ypole = [];
+    for(var j=0;j<=200;j++){
+        ypole[j] = j;
+    }
+    var  trace1 = {
+        x: [],
+        y: [],
+        type: 'scatter',
+        name: 'poloha kyvadla',
+        line: {
+            shape: 'spline',
+            smoothing: 1.3,
+            color: 'rgb(38,30,255)'
+        }
+    };
+
+    console.log(ypole[0]);
+
+
+    var  trace2 = {
+        x: [],
+        y: [],
+        type: 'scatter',
+        name: 'uhol kyvadlovej tyče',
+        line: {
+            shape: 'spline',
+            smoothing: 1.3,
+            color: 'rgb(255,39,24)'
+        }
+    };
+
+
+    var data = [ trace1,trace2];
+
+    var layout = {
+        title:'Line and Scatter Plot',
+        xaxis: {
+            title: 'Čas',
+            range: [0,200]
+        },
+        yaxis: {
+            title: 'R',
+            range: [-0.05,0.25]
+        }
+    };
+
+    Plotly.newPlot(graphDiv, data, layout);
+
+    var cnt = 0;
+    var iterator = 1;
+    var interval = setInterval(function() {
+
+        var update = {
+            x: [[iterator], [iterator]],
+            y: [[positions[iterator]], [angles[iterator]]]
+        };
+
+
+        Plotly.extendTraces('graphDiv', update, [0,1]);
+        cnt++;
+        iterator++;
+
+        if(cnt === 200) clearInterval(interval);
+    }, 10);
+
+
+
+
+    // function rand() {
+    //     return Math.random();
+    // }
+    //
+    // var time = new Date();
+    //
+    // var trace1 = {
+    //     x: [],
+    //     y: [],
+    //     mode: 'lines',
+    //     line: {
+    //         color: '#80CAF6',
+    //         shape: 'spline'
+    //     }
+    // }
+    //
+    // var trace2 = {
+    //     x: [],
+    //     y: [],
+    //     xaxis: 'x2',
+    //     yaxis: 'y2',
+    //     mode: 'lines',
+    //     line: {color: '#DF56F1'}
+    // };
+    //
+    // var layout = {
+    //     xaxis: {
+    //         type: 'date',
+    //         domain: [0, 1],
+    //         showticklabels: false
+    //     },
+    //     yaxis: {domain: [0.6,1]},
+    //     xaxis2: {
+    //         type: 'date',
+    //         anchor: 'y2',
+    //         domain: [0, 1]
+    //     },
+    //     yaxis2: {
+    //         anchor: 'x2',
+    //         domain: [0, 0.4]},
+    // }
+    //
+    // var data = [trace1,trace2];
+    //
+    // Plotly.plot('graphDiv', data, layout);
+    //
+    // var cnt = 0;
+    //
+    // var interval = setInterval(function() {
+    //
+    //     var time = new Date();
+    //
+    //     var update = {
+    //         x: [[time], [time]],
+    //         y: [[rand()], [rand()]]
+    //     }
+    //
+    //     Plotly.extendTraces('graphDiv', update, [0,1])
+    //
+    //     if(cnt === 100) clearInterval(interval);
+    // }, 1000);
+
+
+
+</script>
 </body>
 </html>

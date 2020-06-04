@@ -16,10 +16,11 @@
     <?php
 
     if (isset($_GET['prikaz'])) {
+//        $prikaz = urldecode($_GET['prikaz']);
         echo "<script>
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" . $_GET['prikaz'] . "',
+                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" .$_GET['prikaz']. "',
                     success: function (msg) {
                         $(\"#output1\").html(msg);
                     }
