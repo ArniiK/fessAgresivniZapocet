@@ -84,6 +84,7 @@ if ($method == 'GET') {
            foreach ($oparray as $entry){
                $finalString =$finalString . $entry . " ";
            }
+           $finalString = $finalString . "endOfLastP" . " " . $r;
            echo $finalString;
 
             break;
@@ -129,7 +130,7 @@ if ($method == 'GET') {
             foreach ($oparray as $entry){
                 $finalString =$finalString . $entry . " ";
             }
-            echo $finalString;
+            
 
             break;
         case "getDataLietadlo":
@@ -172,8 +173,58 @@ if ($method == 'GET') {
             foreach ($oparray as $entry){
                 $finalString =$finalString . $entry . " ";
             }
+
+            break;
+
+        case "getDataGulicka":
+            $lastP = [];
+            $r = $_GET['r'];
+            $last = $_GET['last'];
+            if ($last === '0')
+                $lastP = [0,0,0,0];
+            else {
+                $lastArr = preg_split('/:/', $last);
+                array_pop($lastArr);
+                foreach ($lastArr as $lastPos) {
+                    array_push($lastP, $lastPos);
+                }
+            }
+
+            $command = "m = 0.111;
+                        R = 0.015;
+                        g = -9.8;
+                        J = 9.99e-6;
+                        H = -m*g/(J/(R^2)+m);
+                        A = [0 1 0 0; 0 0 H 0; 0 0 0 1; 0 0 0 0];
+                        B = [0;0;0;1];
+                        C = [1 0 0 0];
+                        D = [0];   
+                        K = place(A,B,[-2+2i,-2-2i,-20,-80]);
+                        N = -inv(C*inv(A-B*K)*B);
+                        
+                        sys = ss(A-B*K,B,C,D);
+                        
+                        t = 0:0.01:5;
+                        r = " . $r . ";  
+                        initPozicia=0;
+                        initNaklon=0;
+                        [y,t,x]=lsim(N*sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
+                         disp(x(:,1))
+                        disp('endOfPos')
+                        disp(x(:,3)) 
+                        disp('endOfAng')
+                        disp(x(size(x,1),:))
+                        ";
+
+            $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
+            $oparray = preg_split('/\s+/', trim($output));
+            $finalString="";
+            foreach ($oparray as $entry){
+                $finalString =$finalString . $entry . " ";
+            }
             echo $finalString;
             break;
+
 
     }
 } elseif ($method == 'POST') {

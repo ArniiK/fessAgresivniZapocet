@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>>
 
     <?php
 
@@ -30,8 +31,9 @@
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
                     success: function (msg) {
+                        console.log(msg);
                         handle(msg);                  
                     }
                 });    
@@ -39,7 +41,8 @@
            function handle(msg) {
                 lastPos = [];    
                 var arr = msg.split(\" \");       
-                arr.pop();
+//                arr.pop();
+                r=0;
                 positions = [];
                 angles = [];
                 var pom=0;
@@ -50,13 +53,18 @@
                     }else if(arr[i]==\"endOfAng\"){
                         pom=2;
                         continue;
+                    }else if(arr[i]==\"endOfLastP\"){
+                        pom=3;
+                        continue;
                     }
                     if(pom==0){
                         positions.push(arr[i]);
                     }else if(pom==1){
                         angles.push(arr[i]);
-                    }else{
+                    }else if(pom==2){
                         lastPos.push(arr[i]);
+                    }else{
+                        r=arr[i];
                     }
                 } 
                 
@@ -96,7 +104,7 @@
                         },
                         yaxis: {
                             title: 'R',
-                            range: [-0.05,0.25]
+                            
                         }
                     };
                     var config = {responsive: true};
@@ -119,20 +127,59 @@
                         iterator++;
             
                         if(cnt === 200) clearInterval(interval);
-                    }, 10);
+                    }, 7);
                     
                     var lastPositions = \"\";
                     for (var i=0;i<lastPos.length;i++) {
                         lastPositions = lastPositions + lastPos[i] + ':';
-                        console.log(lastPos[i]);
+//                        console.log(lastPos[i]);
                     }
                     
                     
                     document.getElementById(\"last\").value = lastPositions;
                      console.log('Last after: ' + document.getElementById(\"last\"));
+                    function radians_to_degrees(radians)
+                    {
+                      var pi = Math.PI;
+                      return radians * (180/pi);
+                    }
+//                    r=document.getElementById(\"R\").value;
+                    
+                    if(r==0){
+                        var car = new fabric.Rect({left:100,top:420,fill:'red',width:100,height:70});
+                    }else{
+                        var car = new fabric.Rect({left:900*r,top:420,fill:'red',width:100,height:70});
+                    }
+                    console.log(r);
+                    var canvas = new fabric.Canvas('animationCanvas',{backgroundColor: 'rgb(100,100,100)'});
+                    var road = new fabric.Rect({left:100,top:450,fill:'black',width:800,height:10});
+                    var bar = new fabric.Rect({left:150,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
+                    var pendullum =new fabric.Group([car,bar]);
+                    
+                    canvas.add(road);
+
+                    canvas.add(pendullum);
+                    
+                    for(var j=0;j<positions.length;j++)
+                    {
+                        pendullum.animate('left',900*positions[j],{
+                            duration:4000,
+                            onChange: canvas.renderAll.bind(canvas)});
+                        bar.animate('angle',radians_to_degrees(angles[j]) ,{
+                            
+                            onChange: canvas.renderAll.bind(canvas)});
+
+//                        console.log(radians_to_degrees(angles[j]));
+                    }
                     
                     
-                });
+                    
+                    
+                    
+                    
+                    
+                    
+                });//koniec $.document
                             
             } //konec handle             
                         
@@ -216,6 +263,9 @@
         </form>
         <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
 
+        </div>
+        <div class="col-12" id="animationDiv" style="width:1000px;height:600px;">
+            <canvas width="1000" height="600" id="animationCanvas"></canvas>>
         </div>
 
 

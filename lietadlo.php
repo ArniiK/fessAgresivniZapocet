@@ -1,25 +1,11 @@
 <?php
 include 'inc/mysql_config.php';
 
-if (isset($_GET['prikaz'])) {
+if (isset($_GET['R'])) {
     $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=1";
     $mysqli->query($sql);
 }
 
-if (isset($_GET['prikaz'])) {
-    session_start();
-    $positions = [];
-    $angles = [];
-
-    $positions = $_SESSION['pos'];
-    $angles = $_SESSION['ang'];
-}
-else{
-    $positions = [];
-    $angles = [];
-    $_SESSION['pos'] = [];
-    $_SESSION['ang'] = [];
-}
 ?>
 
 <!doctype html>
@@ -33,122 +19,143 @@ else{
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"> </script>
     <?php
-
     if (isset($_GET['R'])) {
 
-        echo "<script>
+    echo "<script>
 
         $.ajax({
-                    type: 'GET',
-                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
-                    success: function (msg) {
-                        console.log(msg);
-                        handle(msg);                  
-                    }
-                });    
-                        
-           function handle(msg) {
-                lastPos = [];    
-                var arr = msg.split(\" \");       
-                arr.pop();
-                positions = [];
-                angles = [];
-                var pom=0;
-                for(var i=0;i<arr.length;i++){
-                    if(arr[i]==\"endOfPos\"){
-                        pom=1;
-                        continue;
-                    }else if(arr[i]==\"endOfAng\"){
-                        pom=2;
-                        continue;
-                    }
-                    if(pom==0){
-                        positions.push(arr[i]);
-                    }else if(pom==1){
-                        angles.push(arr[i]);
-                    }else{
-                        lastPos.push(arr[i]);
-                    }
-                } 
-                
-                $(document).ready(function() {
-                    var  trace1 = {
-                        x: [],
-                        y: [],
-                        type: 'scatter',
-                        name: 'poloha kyvadla',
-                        line: {
-                            shape: 'spline',
-                            smoothing: 1.3,
-                            color: 'rgb(255, 98, 157)'
-                        }
-                    };
-                
-                    var  trace2 = {
-                        x: [],
-                        y: [],
-                        type: 'scatter',
-                        name: 'uhol kyvadlovej tyče',
-                        line: {
-                            shape: 'spline',
-                            smoothing: 1.3,
-                            color: 'rgb(98, 157, 255)'
-                        }
-                    };
-                
-                    
-                    var data = [ trace1,trace2];
-                
-                    var layout = {
-                        title:'Prevrátené kyvadlo',
-                        xaxis: {
-                            title: 'Čas',
-                            range: [0,200]
-                        },
-                        yaxis: {
-                            title: 'R',
-                            range: [-0.05,0.25]
-                        }
-                    };
-                    var config = {responsive: true};
-                
-                    
-                    
-                    Plotly.newPlot(graphDiv, data, layout,config);
-                    
-                    var cnt = 0;                    
-                    var iterator = 1;
-                    var interval = setInterval(function() {
-                        var update = {
-                            x: [[iterator], [iterator]],
-                            y: [[positions[iterator]], [angles[iterator]]]
-                        };
+            type: 'GET',
+            url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+            success: function (msg) {
+                console.log(msg);
+                handle(msg);
+            }
+        });
+
+        function handle(msg) {
+            lastPos = [];
+            var arr = msg.split(\" \");       
+            arr.pop();
+            positions = [];
+            angles = [];
+            var pom=0;
+            for(var i=0;i<arr.length;i++){
+                if(arr[i]==\"endOfPos\"){
+                pom=1;
+                continue;
+            }else if(arr[i]==\"endOfAng\"){
+            pom=2;
+            continue;
+        }
+        if(pom==0){
+            positions.push(arr[i]);
+        }else if(pom==1){
+            angles.push(arr[i]);
+        }else{
+            lastPos.push(arr[i]);
+        }
+        }
+
+        $(document).ready(function() {
+            var  trace1 = {
+                x: [],
+                y: [],
+                type: 'scatter',
+                name: 'Náklon lietadla',
+                line: {
+                    shape: 'spline',
+                    smoothing: 1.3,
+                    color: 'rgb(255, 98, 157)'
+                }
+            };
+
+            var  trace2 = {
+                x: [],
+                y: [],
+                type: 'scatter',
+                name: 'Náklon zadnej klapky',
+                line: {
+                    shape: 'spline',
+                    smoothing: 1.3,
+                    color: 'rgb(98, 157, 255)'
+                }
+            };
+
+
+            var data = [ trace1,trace2];
+
+            var layout = {
+                title:'Náklon lietadla',
+                xaxis: {
+                    title: 'Čas',
+                    range: [0,200]
+                },
+                yaxis: {
+                    title: 'Uhol v rad'
+                },
+                legend:{
+                    xanchor:\"center\",
+                    yanchor:\"top\",
+                    y:-0.3, // play with it
+                    x:0.5   // play with it
+                }
+            };
+            var config = {responsive: true};
+
+
+
+            Plotly.newPlot(graphDiv, data, layout,config);
+
+            var cnt = 0;
+            var iterator = 1;
+            var interval = setInterval(function() {
+                var update = {
+                    x: [[iterator], [iterator]],
+                    y: [[positions[iterator]], [angles[iterator]]]
+                };
+
+
+                Plotly.extendTraces('graphDiv', update, [0,1]);
+                cnt++;
+                iterator++;
+
+                if(cnt === 200) clearInterval(interval);
+            }, 10);
+
+            var lastPositions = \"\";
+            for (var i=0;i<lastPos.length;i++) {
+                lastPositions = lastPositions + lastPos[i] + ':';
+                console.log(lastPos[i]);
+            }
+
+            document.getElementById(\"last\").value = lastPositions;                   
+        });
+
+            var imgURL = 'http://i.imgur.com/8rmMZI3.jpg';
             
-            
-                        Plotly.extendTraces('graphDiv', update, [0,1]);
-                        cnt++;
-                        iterator++;
-            
-                        if(cnt === 200) clearInterval(interval);
-                    }, 10);
-                    
-                    var lastPositions = \"\";
-                    for (var i=0;i<lastPos.length;i++) {
-                        lastPositions = lastPositions + lastPos[i] + ':';
-                        console.log(lastPos[i]);
-                    }
-                    
-                    
-                    document.getElementById(\"last\").value = lastPositions;
-                     console.log('Last after: ' + document.getElementById(\"last\"));
-                    
-                    
+            var canvas = new fabric.Canvas('canvas');
+           
+            var pugImg = new Image();
+            pugImg.onload = function (img) {    
+                var pug = new fabric.Image(pugImg, {
+                    angle: 45,
+                    width: 500,
+                    height: 500,
+                    left: 50,
+                    top: 70,
+                    scaleX: .25,
+                    scaleY: .25
                 });
-                            
-            } //konec handle             
-                        
-</script>";
+                canvas.add(pug);
+            };
+            pugImg.src = imgURL;
+            
+            
+        } //konec handle             
+
+    </script>";
 
     }
 
@@ -222,16 +229,14 @@ else{
                     <button type="submit" id='run' class="btn btn-outline-primary">Skompilovať</button>
                 </div>
             </div>
-
+        </form>
 
             <label for="graphDiv"><h3>Výsledok</h3></label>
             <br>
             <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
-
-
             </div>
-        </form>
-
+                <canvas id="canvas" width="1600" height="500">
+                </canvas>
 
     </div>
 </div>
@@ -242,83 +247,5 @@ else{
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
-<script>
-    var positions = <?=json_encode($positions)?>;
-    var angles = <?=json_encode($angles)?>;
-
-    var ypole = [];
-    for(var j=0;j<=200;j++){
-        ypole[j] = j;
-    }
-    var  trace1 = {
-        x: [],
-        y: [],
-        type: 'scatter',
-        name: 'Náklon lietadla',
-        line: {
-            shape: 'spline',
-            smoothing: 1.3,
-            color: 'rgb(255,72,83)'
-        }
-    };
-
-    var  trace2 = {
-        x: [],
-        y: [],
-        type: 'scatter',
-        name: 'Náklon zadnej klapky',
-        line: {
-            shape: 'spline',
-            smoothing: 1.3,
-            color: 'rgb(128,255,103)'
-        }
-    };
-
-
-    var data = [ trace1,trace2];
-
-    var layout = {
-        title:'Náklon lietadla',
-        xaxis: {
-            title: 'Čas',
-            range: [0,200]
-        },
-        yaxis: {
-            title: 'Uhol v rad',
-            //range: [-<?=json_encode($_GET['R'])?>,<?=json_encode($_GET['R']*2)?>]
-            range: [<?=json_encode( "-0.4,0.4")?>]
-        },
-        legend:{
-            xanchor:"center",
-            yanchor:"top",
-            y:-0.3, // play with it
-            x:0.5   // play with it
-        }
-
-    };
-    var config = {responsive: true}
-
-
-    Plotly.newPlot(graphDiv, data, layout, config);
-
-    var cnt = 0;
-    var iterator = 1;
-    var interval = setInterval(function() {
-
-        var update = {
-            x: [[iterator], [iterator]],
-            y: [[positions[iterator]], [angles[iterator]]]
-        };
-
-
-        Plotly.extendTraces('graphDiv', update, [0,1]);
-        cnt++;
-        iterator++;
-
-        if(cnt === 200) clearInterval(interval);
-    }, 10);
-
-
-</script>>
 </body>
 </html>
