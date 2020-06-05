@@ -27,17 +27,18 @@ if (isset($_GET['R'])) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+            url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
             success: function (msg) {
-                console.log(msg);
+                //console.log(msg);
                 handle(msg);
             }
         });
 
         function handle(msg) {
             lastPos = [];
+            lastRs = [];
             var arr = msg.split(\" \");       
-            arr.pop();
+            //arr.pop();
             positions = [];
             angles = [];
             var pom=0;
@@ -46,18 +47,27 @@ if (isset($_GET['R'])) {
                 pom=1;
                 continue;
             }else if(arr[i]==\"endOfAng\"){
-            pom=2;
-            continue;
-        }
-        if(pom==0){
-            positions.push(arr[i]);
-        }else if(pom==1){
-            angles.push(arr[i]);
-        }else{
-            lastPos.push(arr[i]);
-        }
-        }
-
+                pom=2;
+                continue;
+            }else if (arr[i]==\"endOfLastP\"){
+                pom=3;
+                continue;
+            }
+        
+            if(pom==0){
+                positions.push(arr[i]);
+            }else if(pom==1){
+                angles.push(arr[i]);
+            }else if (pom==2){
+                lastPos.push(arr[i]);
+                }
+            else {
+                lastRs.push(arr[i]);
+                }
+            }
+            
+            
+            
         $(document).ready(function() {
             var  trace1 = {
                 x: [],
@@ -127,30 +137,46 @@ if (isset($_GET['R'])) {
             var lastPositions = \"\";
             for (var i=0;i<lastPos.length;i++) {
                 lastPositions = lastPositions + lastPos[i] + ':';
-                console.log(lastPos[i]);
             }
 
-            document.getElementById(\"last\").value = lastPositions;                   
+            document.getElementById(\"last\").value = lastPositions;    
+            document.getElementById(\"lastR\").value = lastRs[0];  
+            
+            
+                           
         });
 
-            var imgURL = 'http://i.imgur.com/8rmMZI3.jpg';
+            var pi = Math.PI;
+            var lastDeg =  lastRs[1] * (180/pi);
+            var currDeg = lastRs[0] * (180/pi);
+            var imgURL = 'icons/jet.png';
             
             var canvas = new fabric.Canvas('canvas');
            
-            var pugImg = new Image();
-            pugImg.onload = function (img) {    
-                var pug = new fabric.Image(pugImg, {
-                    angle: 45,
-                    width: 500,
-                    height: 500,
-                    left: 50,
-                    top: 70,
-                    scaleX: .25,
-                    scaleY: .25
+            var jetImg = new Image();
+            jetImg.onload = function (img) {    
+                var jet = new fabric.Image(jetImg, {
+                    left: 400,
+                    top: 300,
+                    scaleX: .50,
+                    scaleY: .50,
+                    angle: lastDeg,
+                    originX: 'center',
+                    originY: 'center'
                 });
-                canvas.add(pug);
+                canvas.add(jet);
+                
+                for (var i=0;i<positions.length;i++) {
+                     var deg = positions[i] * (180/pi);
+                     jet.animate('angle', deg, {
+                        duration: 1000,
+                        onChange: canvas.renderAll.bind(canvas)
+                    } )
+                }
+                
+                
             };
-            pugImg.src = imgURL;
+            jetImg.src = imgURL;
             
             
         } //konec handle             
@@ -224,6 +250,7 @@ if (isset($_GET['R'])) {
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
+                    <input type="hidden" id="lastR" name="lastR" value="0">
                 </div>
                 <div class="col-1 mt-5">
                     <button type="submit" id='run' class="btn btn-outline-primary">Skompilovať</button>

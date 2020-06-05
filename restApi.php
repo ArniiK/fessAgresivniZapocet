@@ -134,6 +134,7 @@ if ($method == 'GET') {
 
             break;
         case "getDataLietadlo":
+            $lastR = $_GET['lastR'];
             $lastP = [];
             $r = $_GET['r'];
             $last = $_GET['last'];
@@ -171,9 +172,10 @@ if ($method == 'GET') {
             $oparray = preg_split('/\s+/', trim($output));
             $finalString="";
             foreach ($oparray as $entry){
-                $finalString =$finalString . $entry . " ";
+                $finalString = $finalString . $entry . " ";
             }
-
+            $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
+            echo $finalString;
             break;
 
         case "getDataGulicka":
