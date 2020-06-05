@@ -31,7 +31,7 @@
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
                     success: function (msg) {
                         console.log(msg);
                         handle(msg);                  
@@ -39,10 +39,11 @@
                 });    
                         
            function handle(msg) {
-                lastPos = [];    
+                lastPos = [];   
+                lastRs = [];
                 var arr = msg.split(\" \");       
 //                arr.pop();
-                r=0;
+                
                 positions = [];
                 angles = [];
                 var pom=0;
@@ -64,7 +65,7 @@
                     }else if(pom==2){
                         lastPos.push(arr[i]);
                     }else{
-                        r=arr[i];
+                        lastRs.push(arr[i]);
                     }
                 } 
                 
@@ -137,47 +138,53 @@
                     
                     
                     document.getElementById(\"last\").value = lastPositions;
-                     console.log('Last after: ' + document.getElementById(\"last\"));
-                    function radians_to_degrees(radians)
-                    {
-                      var pi = Math.PI;
-                      return radians * (180/pi);
-                    }
+                    document.getElementById(\"lastR\").value = lastRs[0]; 
+                    
+                    
+                    
 //                    r=document.getElementById(\"R\").value;
                     
-                    if(r==0){
-                        var car = new fabric.Rect({left:100,top:420,fill:'red',width:100,height:70});
+                    if(lastRs[1]!=0){
+                        var car = new fabric.Rect({left:900*lastRs[1],top:420,fill:'red',width:100,height:70});
+                        var bar = new fabric.Rect({left:900*lastRs[1]+50,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
+                        
                     }else{
-                        var car = new fabric.Rect({left:900*r,top:420,fill:'red',width:100,height:70});
+                        var car = new fabric.Rect({left:100,top:420,fill:'red',width:100,height:70});
+                        var bar = new fabric.Rect({left:150,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
                     }
-                    console.log(r);
+
+//                    var car = new fabric.Rect({left:100,top:420,fill:'red',width:100,height:70});
+//                    console.log(r);
                     var canvas = new fabric.Canvas('animationCanvas',{backgroundColor: 'rgb(100,100,100)'});
                     var road = new fabric.Rect({left:100,top:450,fill:'black',width:800,height:10});
-                    var bar = new fabric.Rect({left:150,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
+                    
                     var pendullum =new fabric.Group([car,bar]);
                     
                     canvas.add(road);
 
                     canvas.add(pendullum);
-                    
+//                    canvas.add(bar);
                     for(var j=0;j<positions.length;j++)
                     {
-                        pendullum.animate('left',900*positions[j],{
+                        pendullum.animate('left', 900*positions[j] ,{
                             duration:4000,
                             onChange: canvas.renderAll.bind(canvas)});
-                        bar.animate('angle',radians_to_degrees(angles[j]) ,{
-                            
+                        var pi = Math.PI;
+                        
+                        var deg = angles[j] * (180/pi);
+                        bar.animate('angle', deg ,{
+                            duration:4000,
                             onChange: canvas.renderAll.bind(canvas)});
-
-//                        console.log(radians_to_degrees(angles[j]));
+                       
+                        
+                        console.log(deg);
                     }
                     
                     
                     
                     
                     
-                    
-                    
+                                      
                     
                 });//koniec $.document
                             
@@ -253,6 +260,7 @@
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
+                    <input type="hidden" id="lastR" name="lastR" value="0">
                 </div>
 
                 <div class="col-1 mt-5">

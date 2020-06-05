@@ -40,6 +40,7 @@ if ($method == 'GET') {
             break;
         case "getDataKyvadlo":
             $lastP = [];
+            $lastR = $_GET['lastR'];
             $r = $_GET['r'];
             $last = $_GET['last'];
             if ($last === '0')
@@ -84,7 +85,7 @@ if ($method == 'GET') {
            foreach ($oparray as $entry){
                $finalString =$finalString . $entry . " ";
            }
-           $finalString = $finalString . "endOfLastP" . " " . $r;
+            $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
            echo $finalString;
 
             break;
