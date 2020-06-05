@@ -201,6 +201,15 @@ if (isset($_GET['prikaz'])) {
                         
 </script>";
 
+    }else{
+        echo "<script>
+        $(document).ready(function(){
+                    $(\"#graphDiv\").hide();
+                    $(\"#graphLabel\").hide();
+                    $(\"#animation\").hide();
+                
+            });
+        </script>";
     }
 
     ?>
@@ -260,11 +269,11 @@ if (isset($_GET['prikaz'])) {
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox1">Chart</label>
                     </div>
                     <div class="form-check form-check-inline ml-5">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox2">Animation</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
@@ -280,18 +289,32 @@ if (isset($_GET['prikaz'])) {
         </form>
 
 
-        <label for="graphDiv"><h3>Result</h3></label>
+        <label for="graphDiv" id="graphLabel"><h3>Result</h3></label>
         <br>
         <div id="graphDiv"></div>
 
-        <hr>
-        <label for="animation"><h3>Animation</h3></label><br>
+
+
         <div id="animation" class="fabric-canvas-wrapper">
+            <hr>
+            <label for="animation"><h3>Animation</h3></label><br>
             <canvas id="theCanvas"></canvas>
         </div>
 
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $("#inlineCheckbox1").click(function(){
+            $("#graphDiv").toggle();
+            $("#graphLabel").toggle();
+        });
+        $("#inlineCheckbox2").click(function(){
+            $("#animation").toggle();
+        });
+    });
+</script>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
