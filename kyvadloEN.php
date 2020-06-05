@@ -43,10 +43,13 @@ if (isset($_GET['prikaz'])) {
                     <li class="nav-item">
                         <a class="nav-link" href="prikazyEN.php">Commands</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="statistikaEN.php">Statistics</a>
+                    </li>
                 </ul>
 
                 <div class="row col-12 ml-4">
-                    <a class="nav-link offset-5 btn btn-dark col-xs-2" href="kyvadlo.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link offset-4 btn btn-dark col-xs-2" href="kyvadlo.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link active btn btn-dark col-xs-2" href="kyvadloEN.php"><i id="ukIcon"></i></a>
                 </div>
 

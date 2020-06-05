@@ -1,7 +1,17 @@
 <?php
 include 'inc/mysql_config.php';
 
+$sql = "SELECT * FROM statistika";
+$result = $mysqli->query($sql);
+$msg = "";
+while ($obj = $result->fetch_object()) {
+    $msg .= $obj->meno . " - " . $obj->pristupy . "\n";
+}
 
+if(isset($_POST['email']))
+    $headers = "From: finalzadanie@example.com" . "\r\n" .
+    "CC: " . $_POST['email'];
+    mail($_POST['email'],"Štatistika",  $msg, $headers);
 ?>
 
 <!doctype html>
@@ -81,6 +91,21 @@ include 'inc/mysql_config.php';
             ?>
             </tbody>
         </table>
+        <hr>
+
+            <form action="statistika.php" method="post">
+                <div class="form-group form-row">
+                    <div class="col-md-10">
+                        <label for="prikaz"><h2>Odoslanie</h2></label>
+                        <input type="email" class="form-control form-control-lg" name="email" id="email" placeholder="E-mail" required>
+                        <small id="emailHelp" class="form-text text-muted">Sem môžete zadat emailovú adresu kam poslať údaje</small>
+                    </div>
+                    <div class="col-1 mt-5">
+                        <button type="submit" class="btn btn-outline-primary">Odoslať</button>
+                    </div>
+                </div>
+            </form>
+
 
     </div>
 </div>

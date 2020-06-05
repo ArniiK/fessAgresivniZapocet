@@ -38,10 +38,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="prikazy.php">Príkazy</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="statistika.php">Štatistika</a>
+                    </li>
                 </ul>
 
                 <div class="row col-12">
-                    <a class="nav-link offset-6 active btn btn-dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link offset-5 active btn btn-dark col-xs-2" href="index.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link btn btn-dark col-xs-2" href="indexEn.php"><i id="ukIcon"></i></a>
                 </div>
 

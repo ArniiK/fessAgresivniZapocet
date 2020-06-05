@@ -28,7 +28,7 @@
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8038/final/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
                     success: function (msg) {
                         handle(msg);                  
                     }
@@ -87,14 +87,14 @@
                     var data = [ trace1,trace2];
                 
                     var layout = {
-                        title:'Prevrátené kyvadlo',
+                        title:'Tlmič',
                         xaxis: {
                             title: 'Čas',
                             range: [0,200]
                         },
                         yaxis: {
                             title: 'R',
-                            range: [-0.05,0.25]
+                            
                         }
                     };
                     var config = {responsive: true};
@@ -167,10 +167,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="prikazy.php">Príkazy</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="statistika.php">Štatistika</a>
+                    </li>
                 </ul>
 
                 <div class="row col-12">
-                    <a class="nav-link offset-6 active btn btn-dark col-xs-2" href="kyvadlo.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link offset-5 active btn btn-dark col-xs-2" href="kyvadlo.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link btn btn-dark col-xs-2" href="kyvadloEN.php"><i id="ukIcon"></i></a>
                 </div>
 
