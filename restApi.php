@@ -209,7 +209,11 @@ if ($method == 'GET') {
                         initPozicia=0;
                         initNaklon=0;
                         [y,t,x]=lsim(N*sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
-                        plot(t,y)
+                         disp(x(:,1))
+                        disp('endOfPos')
+                        disp(x(:,3)) 
+                        disp('endOfAng')
+                        disp(x(size(x,1),:))
                         ";
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
