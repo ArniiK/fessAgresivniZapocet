@@ -29,7 +29,7 @@ if (isset($_GET['R'])) {
             type: 'GET',
             url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
             success: function (msg) {
-                //console.log(msg);
+                console.log(msg);
                 handle(msg);
             }
         });
@@ -148,37 +148,56 @@ if (isset($_GET['R'])) {
 
             var pi = Math.PI;
             var lastDeg =  lastRs[1] * (180/pi);
-            var currDeg = lastRs[0] * (180/pi);
-            var imgURL = 'icons/jet.png';
+            var currDeg = lastRs[0] * (180/pi);           
+            var currFlapDeg = angles[200] * (180/pi);
+            console.log(angles);
+            console.log(currFlapDeg);
+            var jetURL = 'icons/jet.png';
+            var flapURL= 'icons/flap.png';
             
             var canvas = new fabric.Canvas('canvas');
            
             var jetImg = new Image();
-            jetImg.onload = function (img) {    
+            var flapImg = new Image();         
+            jetImg.onload = function () {    
                 var jet = new fabric.Image(jetImg, {
-                    left: 400,
-                    top: 300,
+                    left: 200, 
+                    top: 200,
                     scaleX: .50,
                     scaleY: .50,
+                    originX: 'center',
+                    originY: 'center' 
+                });
+               
+                var flap = new fabric.Image(flapImg, {
+                    left: 20, 
+                    top: 170,
+                    scaleX: .50,
+                    scaleY: .50, 
+                    originX: 'center',
+                    originY: 'center' 
+                });
+                
+                var group = new fabric.Group([ jet, flap ], {
                     angle: lastDeg,
                     originX: 'center',
-                    originY: 'center'
+                    originY: 'center' 
                 });
-                canvas.add(jet);
+                canvas.add(group);
+         
+                group.animate('angle', currDeg, {
+                    duration: 2000,
+                    onChange: canvas.renderAll.bind(canvas)
+                } );  
+              
+                flap.animate('angle', currFlapDeg*10, {
+                    duration: 2000,
+                    onChange: canvas.renderAll.bind(canvas)
+                } ) ;
                 
-                for (var i=0;i<positions.length;i++) {
-                     var deg = positions[i] * (180/pi);
-                     jet.animate('angle', deg, {
-                        duration: 1000,
-                        onChange: canvas.renderAll.bind(canvas)
-                    } )
-                }
-                
-                
-            };
-            jetImg.src = imgURL;
-            
-            
+              };
+            jetImg.src = jetURL;
+            flapImg.src = flapURL;
         } //konec handle             
 
     </script>";
@@ -242,11 +261,11 @@ if (isset($_GET['R'])) {
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked>
                         <label class="form-check-label" for="inlineCheckbox1">Graf</label>
                     </div>
                     <div class="form-check form-check-inline ml-5">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked>
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
@@ -262,8 +281,11 @@ if (isset($_GET['R'])) {
             <br>
             <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
             </div>
-                <canvas id="canvas" width="1600" height="500">
-                </canvas>
+        <div id="animation" class="fabric-canvas-wrapper">
+            <hr>
+            <label for="animation"><h3>Animácia</h3></label><br>
+            <canvas id="canvas" width="1060" height="400"></canvas>
+        </div>
 
     </div>
 </div>
