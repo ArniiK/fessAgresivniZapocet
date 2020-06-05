@@ -20,6 +20,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <?php
 
@@ -95,6 +96,12 @@
                         yaxis: {
                             title: 'R',
                             
+                        },
+                        legend:{
+                            xanchor:\"center\",
+                            yanchor:\"top\",
+                            y:-0.3, // play with it
+                            x:0.5   // play with it
                         }
                     };
                     var config = {responsive: true};
@@ -131,8 +138,67 @@
                     
                     
                 });
-                            
-            } //konec handle             
+                     
+                     function resizeCanvas() {
+                        const outerCanvasContainer = $('.fabric-canvas-wrapper')[0];
+    
+                        const ratio = canvas.getWidth() / canvas.getHeight();
+                        const containerWidth   = outerCanvasContainer.clientWidth;
+                        const containerHeight  = outerCanvasContainer.clientHeight;
+
+                        const scale = containerWidth / canvas.getWidth();
+                        const zoom  = canvas.getZoom() * scale;
+                        canvas.setDimensions({width: containerWidth, height: containerWidth / ratio});
+                        canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+                    }
+
+                $(window).resize(resizeCanvas);
+                     
+                var autoURL = 'icons/auto.png';
+                var kolesaURL = 'icons/kolesa.png';
+                var canvas = new fabric.Canvas('theCanvas',{
+                    width: 1050,
+                    height: 400
+                });
+
+                var autoImg = new Image();
+                var kolesaImg = new Image();
+                kolesaImg.src = kolesaURL;
+                autoImg.src = autoURL;
+                
+                autoImg.onload = function (img) {    
+                var auto = new fabric.Image(autoImg, {
+                        left: 100,
+                        top: 10,
+                        scaleX: .50,
+                        scaleY: .50
+                });
+                canvas.add(auto);
+                };
+                
+                kolesaImg.onload = function(img){
+                var kolesa = new fabric.Image(kolesaImg,{
+                        left: 100,
+                        top: 10,
+                        scaleX: .50,
+                        scaleY: .50
+                });  
+                canvas.add(kolesa);
+                console.log(positions);
+                
+                for(var i=0;i<positions.length;i++){
+                    
+                    kolesa.animate('top', + (100*positions[i]),{
+                        duration: 1000,
+                        onChange: canvas.renderAll.bind(canvas)
+                });
+                        
+                }
+                
+                };  
+     } //konec handle  
+            
+            
                         
 </script>";
 
@@ -211,10 +277,18 @@
                 </div>
 
                 </div>
-                <label for="graphDiv"><h3>Výsledok</h3></label>
-                <br>
-                <div class="col-12" id="graphDiv" style="width: 100%;height:500px"></div>
+
         </form>
+
+        <label for="graphDiv"><h3>Výsledok</h3></label>
+        <br>
+        <div class="col-12" id="graphDiv" style="width: 100%;height:500px"></div>
+
+        <hr>
+        <label for="animation"><h3>Animácia</h3></label><br>
+        <div id="animation" class="fabric-canvas-wrapper">
+            <canvas id="theCanvas"></canvas>
+        </div>
 
 
     </div>
