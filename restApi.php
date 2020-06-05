@@ -203,13 +203,11 @@ if ($method == 'GET') {
                         N = -inv(C*inv(A-B*K)*B);
                         
                         sys = ss(A-B*K,B,C,D);
-                        
                         t = 0:0.01:5;
                         r = " . $r . ";  
-                        initPozicia=0;
-                        initNaklon=0;
+
                         [y,t,x]=lsim(N*sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
-                         disp(x(:,1))
+                        disp(N*x(:,1))
                         disp('endOfPos')
                         disp(x(:,3)) 
                         disp('endOfAng')
