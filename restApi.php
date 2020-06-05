@@ -84,7 +84,7 @@ if ($method == 'GET') {
            foreach ($oparray as $entry){
                $finalString =$finalString . $entry . " ";
            }
-           $finalString = $finalString . "endOfLastP" . $r;
+           $finalString = $finalString . "endOfLastP" . " " . $r;
            echo $finalString;
 
             break;
@@ -130,7 +130,7 @@ if ($method == 'GET') {
             foreach ($oparray as $entry){
                 $finalString =$finalString . $entry . " ";
             }
-            echo $finalString . "endOfLastP" .  $r;
+            
 
             break;
         case "getDataLietadlo":
@@ -173,7 +173,7 @@ if ($method == 'GET') {
             foreach ($oparray as $entry){
                 $finalString =$finalString . $entry . " ";
             }
-            echo $finalString . "endOfLastP". $r;
+
             break;
 
         case "getDataGulicka":
