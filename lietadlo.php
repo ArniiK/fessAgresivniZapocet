@@ -19,6 +19,7 @@ if (isset($_GET['R'])) {
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"> </script>
     <?php
     if (isset($_GET['R'])) {
 
@@ -132,6 +133,26 @@ if (isset($_GET['R'])) {
             document.getElementById(\"last\").value = lastPositions;                   
         });
 
+            var imgURL = 'http://i.imgur.com/8rmMZI3.jpg';
+            
+            var canvas = new fabric.Canvas('canvas');
+           
+            var pugImg = new Image();
+            pugImg.onload = function (img) {    
+                var pug = new fabric.Image(pugImg, {
+                    angle: 45,
+                    width: 500,
+                    height: 500,
+                    left: 50,
+                    top: 70,
+                    scaleX: .25,
+                    scaleY: .25
+                });
+                canvas.add(pug);
+            };
+            pugImg.src = imgURL;
+            
+            
         } //konec handle             
 
     </script>";
@@ -208,16 +229,14 @@ if (isset($_GET['R'])) {
                     <button type="submit" id='run' class="btn btn-outline-primary">Skompilovať</button>
                 </div>
             </div>
-
+        </form>
 
             <label for="graphDiv"><h3>Výsledok</h3></label>
             <br>
             <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
-
-
             </div>
-        </form>
-
+                <canvas id="canvas" width="1600" height="500">
+                </canvas>
 
     </div>
 </div>

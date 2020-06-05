@@ -212,12 +212,9 @@ if (isset($_GET['R'])) {
             </div>
         </form>
 
-        <label for="graphDiv"><h3>Result</h3></label>
-        <br>
-        <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
-
-
-
+            <label for="graphDiv"><h3>Result</h3></label>
+            <br>
+            <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
         </div>
 </div>
 
