@@ -63,7 +63,7 @@
                         x: [],
                         y: [],
                         type: 'scatter',
-                        name: 'poloha kyvadla',
+                        name: 'Pozícia kolesa',
                         line: {
                             shape: 'spline',
                             smoothing: 1.3,
@@ -75,7 +75,7 @@
                         x: [],
                         y: [],
                         type: 'scatter',
-                        name: 'uhol kyvadlovej tyče',
+                        name: 'Pozícia vozidla',
                         line: {
                             shape: 'spline',
                             smoothing: 1.3,
@@ -90,7 +90,7 @@
                         title:'Tlmič',
                         xaxis: {
                             title: 'Čas',
-                            range: [0,200]
+                            range: [0,500]
                         },
                         yaxis: {
                             title: 'R',
@@ -116,7 +116,7 @@
                         cnt++;
                         iterator++;
             
-                        if(cnt === 200) clearInterval(interval);
+                        if(cnt === 500) clearInterval(interval);
                     }, 10);
                     
                     var lastPositions = \"\";
@@ -173,8 +173,8 @@
                 </ul>
 
                 <div class="row col-12">
-                    <a class="nav-link offset-5 active btn btn-dark col-xs-2" href="kyvadlo.php"><i id="slovakiaIcon"></i></a>
-                    <a class="nav-link btn btn-dark col-xs-2" href="kyvadloEN.php"><i id="ukIcon"></i></a>
+                    <a class="nav-link offset-5 active btn btn-dark col-xs-2" href="tlmic.php"><i id="slovakiaIcon"></i></a>
+                    <a class="nav-link btn btn-dark col-xs-2" href="tlmicEN.php"><i id="ukIcon"></i></a>
                 </div>
 
             </div>

@@ -18,7 +18,127 @@ if (isset($_GET['prikaz'])) {
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-    <title>Záverečný projekt</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <?php
+
+    if (isset($_GET['R'])) {
+        echo "<script>
+
+        $.ajax({
+                    type: 'GET',
+                    url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    success: function (msg) {
+                        handle(msg);                  
+                    }
+                });    
+                        
+           function handle(msg) {
+                lastPos = [];    
+                var arr = msg.split(\" \");       
+                arr.pop();
+                positions = [];
+                angles = [];
+                var pom=0;
+                for(var i=0;i<arr.length;i++){
+                    if(arr[i]==\"endOfPos\"){
+                        pom=1;
+                        continue;
+                    }else if(arr[i]==\"endOfAng\"){
+                        pom=2;
+                        continue;
+                    }
+                    if(pom==0){
+                        positions.push(arr[i]);
+                    }else if(pom==1){
+                        angles.push(arr[i]);
+                    }else{
+                        lastPos.push(arr[i]);
+                    }
+                } 
+                
+                $(document).ready(function() {
+                    var  trace1 = {
+                        x: [],
+                        y: [],
+                        type: 'scatter',
+                        name: 'Wheel position',
+                        line: {
+                            shape: 'spline',
+                            smoothing: 1.3,
+                            color: 'rgb(255, 98, 157)'
+                        }
+                    };
+                
+                    var  trace2 = {
+                        x: [],
+                        y: [],
+                        type: 'scatter',
+                        name: 'Car body position',
+                        line: {
+                            shape: 'spline',
+                            smoothing: 1.3,
+                            color: 'rgb(98, 157, 255)'
+                        }
+                    };
+                
+                    
+                    var data = [ trace1,trace2];
+                
+                    var layout = {
+                        title:'Car suspension',
+                        xaxis: {
+                            title: 'Čas',
+                            range: [0,500]
+                        },
+                        yaxis: {
+                            title: 'R',
+                            
+                        }
+                    };
+                    var config = {responsive: true};
+                
+                    
+                    
+                    Plotly.newPlot(graphDiv, data, layout,config);
+                    
+                    var cnt = 0;                    
+                    var iterator = 1;
+                    var interval = setInterval(function() {
+                        var update = {
+                            x: [[iterator], [iterator]],
+                            y: [[positions[iterator]], [angles[iterator]]]
+                        };
+            
+            
+                        Plotly.extendTraces('graphDiv', update, [0,1]);
+                        cnt++;
+                        iterator++;
+            
+                        if(cnt === 500) clearInterval(interval);
+                    }, 10);
+                    
+                    var lastPositions = \"\";
+                    for (var i=0;i<lastPos.length;i++) {
+                        lastPositions = lastPositions + lastPos[i] + ':';
+                        console.log(lastPos[i]);
+                    }
+                    
+                    
+                    document.getElementById(\"last\").value = lastPositions;
+                     console.log('Last after: ' + document.getElementById(\"last\"));
+                    
+                    
+                });
+                            
+            } //konec handle             
+                        
+</script>";
+
+    }
+
+    ?>
+    <title>Final project</title>
 </head>
 <body>
 <nav>
@@ -63,14 +183,14 @@ if (isset($_GET['prikaz'])) {
 <div class="container">
     <div class="jumbotron">
 
-        <h1 class="display-5">Gulička na tyči</h1>
+        <h1 class="display-5">Car suspension</h1>
         <hr>
         <form action="tlmicEN.php" method="get">
             <div class="form-group form-row">
                 <div class="col-md-4">
-                    <label for="prikaz"><h3>Insert value</h3></label>
-                    <input type="text" class="form-control form-control-lg" name="prikaz" id="prikaz" placeholder="R">
-                    <small id="emailHelp" class="form-text text-muted">Insert R here</small>
+                    <label for="prikaz"><h3>Insert R</h3></label>
+                    <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R" required>
+                    <small id="emailHelp" class="form-text text-muted">Place R value here</small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">
@@ -81,11 +201,17 @@ if (isset($_GET['prikaz'])) {
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
                         <label class="form-check-label" for="inlineCheckbox2">Animation</label>
                     </div>
+                    <input type="hidden" id="last" name="last" value="0">
                 </div>
+
                 <div class="col-1 mt-5">
                     <button type="submit" class="btn btn-outline-primary">Send</button>
                 </div>
+
             </div>
+            <label for="graphDiv"><h3>Result</h3></label>
+            <br>
+            <div class="col-12" id="graphDiv" style="width: 100%;height:500px"></div>
         </form>
 
 

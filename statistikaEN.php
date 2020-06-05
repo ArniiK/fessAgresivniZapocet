@@ -1,10 +1,18 @@
 <?php
-
 include 'inc/mysql_config.php';
 
+$sql = "SELECT * FROM statistika";
+$result = $mysqli->query($sql);
+$msg = "";
+while ($obj = $result->fetch_object()) {
+    $msg .= $obj->meno_EN . " - " . $obj->pristupy . "\n";
+}
 
+if(isset($_POST['email']))
+    $headers = "From: finalzadanie@example.com" . "\r\n" .
+        "CC: " . $_POST['email'];
+mail($_POST['email'],"Štatistika",  $msg, $headers);
 ?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -14,7 +22,7 @@ include 'inc/mysql_config.php';
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
-    <title>Záverečný projekt</title>
+    <title>Final project</title>
 </head>
 <body>
 <nav>
@@ -82,6 +90,21 @@ include 'inc/mysql_config.php';
             ?>
             </tbody>
         </table>
+
+        <hr>
+
+        <form action="statistikaEN.php" method="post">
+            <div class="form-group form-row">
+                <div class="col-md-10">
+                    <label for="prikaz"><h2>Send data</h2></label>
+                    <input type="email" class="form-control form-control-lg" name="email" id="email" placeholder="E-mail" required>
+                    <small id="emailHelp" class="form-text text-muted">You can place your email for sending data</small>
+                </div>
+                <div class="col-1 mt-5">
+                    <button type="submit" class="btn btn-outline-primary">Send</button>
+                </div>
+            </div>
+        </form>
 
     </div>
 </div>
