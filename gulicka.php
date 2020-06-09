@@ -1,4 +1,5 @@
 <?php
+
 //include 'inc/mysql_config.php';
 //
 //if (isset($_GET['prikaz'])) {
@@ -20,9 +21,11 @@
     <title>Gulička na tyči</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>>
     <?php
 
     if (isset($_GET['R'])) {
+
 
         echo "<script>
 
@@ -30,14 +33,20 @@
                     type: 'GET',
                     url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/gulicka?action=getDataGulicka&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
                     success: function (msg) {
+                        console.log(msg);
                         handle(msg);                  
                     }
                 });    
+                r=0;
                         
            function handle(msg) {
                 lastPos = [];    
                 var arr = msg.split(\" \");       
-                arr.pop();
+//                arr.pop();
+                
+
+
+                
                 positions = [];
                 angles = [];
                 var pom=0;
@@ -48,22 +57,34 @@
                     }else if(arr[i]==\"endOfAng\"){
                         pom=2;
                         continue;
+                    }else if(arr[i]==\"endOfLastP\"){
+                        pom=3;
+                        continue;
                     }
                     if(pom==0){
                         positions.push(arr[i]);
                     }else if(pom==1){
                         angles.push(arr[i]);
-                    }else{
+                    }else if(pom==2){
                         lastPos.push(arr[i]);
+                    }else{
+                        r=arr[i];
+                        console.log(r);
                     }
                 } 
+                console.log('HOMOSAPIENS');
+                console.log(r);
+                
+                localStorage.answer =JSON.stringify(r);
+                let saved = JSON.parse(localStorage.answer);
+                console.log(saved);
                 
                 $(document).ready(function() {
                     var  trace1 = {
                         x: [],
                         y: [],
                         type: 'scatter',
-                        name: 'Gulicka',
+                        name: 'poloha kyvadla',
                         line: {
                             shape: 'spline',
                             smoothing: 1.3,
@@ -89,12 +110,12 @@
                     var layout = {
                         title:'Prevrátené kyvadlo',
                         xaxis: {
-                            title: 'Čas',
+                            title: 'HEJ',
                             range: [0,200]
                         },
                         yaxis: {
                             title: 'R',
-                            range: [-0.05,0.25]
+                            
                         }
                     };
                     var config = {responsive: true};
@@ -116,8 +137,8 @@
                         cnt++;
                         iterator++;
             
-                        if(cnt === 200) clearInterval(interval);
-                    }, 10);
+                        if(cnt === 400) clearInterval(interval);
+                    }, 7);
                     
                     var lastPositions = \"\";
                     for (var i=0;i<lastPos.length;i++) {
@@ -128,9 +149,68 @@
                     
                     document.getElementById(\"last\").value = lastPositions;
                      console.log('Last after: ' + document.getElementById(\"last\"));
+                    function radians_to_degrees(radians)
+                    {
+                      var pi = Math.PI;
+                      return radians * (180/pi);
+                    }
+//                    r=document.getElementById(\"R\").value;
+                    
+                    if(saved == null){
+                        var car = new fabric.Circle({
+                                                        left:100,
+                                                        top:390,                
+                                                        radius:30,
+                                                        stroke:'red',
+                                                        strokeWidth:3,
+                                                        fill:'red'
+                                                    });
+                    }else{
+                        var car = new fabric.Circle({
+                                                        left:900*saved,
+                                                        top:390,                
+                                                        radius:30,
+                                                        stroke:'red',
+                                                        strokeWidth:3,
+                                                        fill:'red'
+                                                    });
+                    }
+                    console.log(r);
+                   
+
                     
                     
-                });
+
+                    var canvas = new fabric.Canvas('animationCanvas',{backgroundColor: 'rgb(255,255,255)'});
+                    var road = new fabric.Rect({left:100,top:450,fill:'black',width:800,height:10});
+                    var pendullum =new fabric.Group([car]);
+                    
+                    canvas.add(road);
+
+                    canvas.add(pendullum);
+                    
+                    for(var j=0;j<positions.length;j++)
+                    {
+                        pendullum.animate('left',900*positions[j],{
+                            duration:6000,
+                            onChange: canvas.renderAll.bind(canvas)});
+//                        bar.animate('angle',radians_to_degrees(angles[j]) ,{
+//                            
+//                            onChange: canvas.renderAll.bind(canvas)});
+
+//                        console.log(radians_to_degrees(angles[j]));
+                    }
+                    
+
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                });//koniec $.document
                             
             } //konec handle             
                         
@@ -201,6 +281,7 @@
                         <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
+                    <input type="hidden" id="last" name="last" value="0">
                 </div>
                 <div class="col-1 mt-5">
                     <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
@@ -211,15 +292,21 @@
             </div>
         </form>
 
+        <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
 
+
+        </div>
+
+        <div class="col-12" id="animationDiv" style="width:1000px;height:600px;">
+            <canvas width="1000" height="600" id="animationCanvas"></canvas>>
+        </div>
     </div>
-</div>
 
 
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
-<script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
+    <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
 </body>
 </html>
