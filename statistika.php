@@ -11,7 +11,7 @@ while ($obj = $result->fetch_object()) {
 if(isset($_POST['email']))
     $headers = "From: finalzadanie@example.com" . "\r\n" .
     "CC: " . $_POST['email'];
-//    mail($_POST['email'],"Štatistika",  $msg, $headers);
+    mail($_POST['email'],"Štatistika",  $msg, $headers);
 ?>
 
 <!doctype html>
