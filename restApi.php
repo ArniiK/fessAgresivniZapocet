@@ -108,6 +108,7 @@ if ($method == 'GET') {
                 echo $finalString;
             }else{
                 echo "unauthorized";
+
             }
 
 
@@ -163,26 +164,34 @@ if ($method == 'GET') {
 
             break;
         case "getDataLietadlo":
-            $lastR = $_GET['lastR'];
-            $lastP = [];
-            $r = $_GET['r'];
-            $sql = "INSERT INTO log (typ,command,error) VALUES
-        ('lietadlo','$r','0')";
-            $mysqli->query($sql);
-
-
-            $last = $_GET['last'];
-            if ($last === '0')
-                $lastP = [0,0,0];
-            else {
-                $lastArr = preg_split('/:/', $last);
-                array_pop($lastArr);
-                foreach ($lastArr as $lastPos) {
-                    array_push($lastP, $lastPos);
+            $apiKeyFromHeader = "";
+            foreach (getallheaders() as $name => $value) {
+                if($name==="api-key"){
+                    $apiKeyFromHeader=$value;
                 }
             }
 
-            $command = "A = [-0.313 56.7 0; -0.0139 -0.426 0; 0 56.7 0];
+            if($apiKeyFromHeader===$apiKey) {
+                $lastR = $_GET['lastR'];
+                $lastP = [];
+                $r = $_GET['r'];
+                $sql = "INSERT INTO log (typ,command,error) VALUES
+        ('lietadlo','$r','0')";
+                $mysqli->query($sql);
+
+
+                $last = $_GET['last'];
+                if ($last === '0')
+                    $lastP = [0, 0, 0];
+                else {
+                    $lastArr = preg_split('/:/', $last);
+                    array_pop($lastArr);
+                    foreach ($lastArr as $lastPos) {
+                        array_push($lastP, $lastPos);
+                    }
+                }
+
+                $command = "A = [-0.313 56.7 0; -0.0139 -0.426 0; 0 56.7 0];
                         B = [0.232; 0.0203; 0];
                         C = [0 0 1];
                         D = [0];
@@ -193,7 +202,7 @@ if ($method == 'GET') {
                         
                         t = 0:0.1:40;
                         r = " . $r . ";                    
-                        [y,t,x]=lsim(sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
+                        [y,t,x]=lsim(sys,r*ones(size(t)),t,[" . implode(",", $lastP) . "]);
 
                         disp(x(:,3))
                         disp('endOfPos')
@@ -202,34 +211,51 @@ if ($method == 'GET') {
                         disp(x(size(x,1),:))
                         ";
 
-            $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
-            $oparray = preg_split('/\s+/', trim($output));
-            $finalString="";
-            foreach ($oparray as $entry){
-                $finalString = $finalString . $entry . " ";
+                $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;' . $command . '"'));
+                $oparray = preg_split('/\s+/', trim($output));
+                $finalString = "";
+                foreach ($oparray as $entry) {
+                    $finalString = $finalString . $entry . " ";
+                }
+                $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
+                echo $finalString;
             }
-            $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
-            echo $finalString;
+            else{
+                echo "unauthorized";
+            }
             break;
 
+
         case "getDataGulicka":
-            $lastP = [];
-            $r = $_GET['r'];
-            $sql = "INSERT INTO log (typ,command,error) VALUES
-        ('gulicka','$r','0')";
-            $mysqli->query($sql);
-            $last = $_GET['last'];
-            if ($last === '0')
-                $lastP = [0,0,0,0];
-            else {
-                $lastArr = preg_split('/:/', $last);
-                array_pop($lastArr);
-                foreach ($lastArr as $lastPos) {
-                    array_push($lastP, $lastPos);
+            $apiKeyFromHeader = "";
+            foreach (getallheaders() as $name => $value) {
+                if($name==="api-key"){
+                    $apiKeyFromHeader=$value;
                 }
             }
 
-            $command = "m = 0.111;
+
+
+
+            if($apiKeyFromHeader===$apiKey) {
+                $lastP = [];
+                $lastR = $_GET['lastR'];
+                $r = $_GET['r'];
+                $sql = "INSERT INTO log (typ,command,error) VALUES
+        ('gulicka','$r','0')";
+                $mysqli->query($sql);
+                $last = $_GET['last'];
+                if ($last === '0')
+                    $lastP = [0, 0, 0, 0];
+                else {
+                    $lastArr = preg_split('/:/', $last);
+                    array_pop($lastArr);
+                    foreach ($lastArr as $lastPos) {
+                        array_push($lastP, $lastPos);
+                    }
+                }
+
+                $command = "m = 0.111;
                         R = 0.015;
                         g = -9.8;
                         J = 9.99e-6;
@@ -245,7 +271,7 @@ if ($method == 'GET') {
                         t = 0:0.01:5;
                         r = " . $r . ";  
 
-                        [y,t,x]=lsim(N*sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
+                        [y,t,x]=lsim(N*sys,r*ones(size(t)),t,[" . implode(",", $lastP) . "]);
                         disp(N*x(:,1))
                         disp('endOfPos')
                         disp(x(:,3)) 
@@ -253,13 +279,21 @@ if ($method == 'GET') {
                         disp(x(size(x,1),:))
                         ";
 
-            $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
-            $oparray = preg_split('/\s+/', trim($output));
-            $finalString="";
-            foreach ($oparray as $entry){
-                $finalString =$finalString . $entry . " ";
+                $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;' . $command . '"'));
+                $oparray = preg_split('/\s+/', trim($output));
+                $finalString = "";
+                foreach ($oparray as $entry) {
+                    $finalString = $finalString . $entry . " ";
+                }
+                $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
+                echo $finalString;
+
+            }else{
+                echo "unauthorized";
+
             }
-            echo $finalString;
+
+
             break;
 
 

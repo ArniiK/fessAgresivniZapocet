@@ -21,17 +21,22 @@
     <title>Gulička na tyči</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>
     <?php
 
-    if (isset($_GET['R'])) {
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aa";
+
+    if (isset($_GET['R'])&&$_GET['R']>=0&&$_GET['R']<=1) {
 
 
         echo "<script>
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/gulicka?action=getDataGulicka&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/gulicka?action=getDataGulicka&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(\"api-key\", \"$key\"); 
+                      },
                     success: function (msg) {
                         console.log(msg);
                         handle(msg);                  
@@ -40,13 +45,14 @@
                 r=0;
                         
            function handle(msg) {
+                 if(msg.localeCompare('unauthorized')){
+                    alert(\"nesprávny api-key\");
+                    return;
+               }
                 lastPos = [];    
+                 lastRs = [];
                 var arr = msg.split(\" \");       
-//                arr.pop();
-                
 
-
-                
                 positions = [];
                 angles = [];
                 var pom=0;
@@ -68,16 +74,9 @@
                     }else if(pom==2){
                         lastPos.push(arr[i]);
                     }else{
-                        r=arr[i];
-                        console.log(r);
+                        lastRs.push(arr[i]);
                     }
                 } 
-                console.log('HOMOSAPIENS');
-                console.log(r);
-                
-                localStorage.answer =JSON.stringify(r);
-                let saved = JSON.parse(localStorage.answer);
-                console.log(saved);
                 
                 $(document).ready(function() {
                     var  trace1 = {
@@ -116,6 +115,12 @@
                         yaxis: {
                             title: 'R',
                             
+                        },
+                        legend:{
+                            xanchor:\"center\",
+                            yanchor:\"top\",
+                            y:-0.3, 
+                            x:0.5   
                         }
                     };
                     var config = {responsive: true};
@@ -148,7 +153,26 @@
                     
                     
                     document.getElementById(\"last\").value = lastPositions;
-                     console.log('Last after: ' + document.getElementById(\"last\"));
+                    document.getElementById(\"lastR\").value = lastRs[0]; 
+                     
+                  
+               });//koniec $.document
+               
+                function resizeCanvas() {
+                        const outerCanvasContainer = $('.fabric-canvas-wrapper')[0];
+    
+                        const ratio = canvas.getWidth() / canvas.getHeight();
+                        const containerWidth   = outerCanvasContainer.clientWidth;
+                        const containerHeight  = outerCanvasContainer.clientHeight;
+
+                        const scale = containerWidth / canvas.getWidth();
+                        const zoom  = canvas.getZoom() * scale;
+                        canvas.setDimensions({width: containerWidth, height: containerWidth / ratio});
+                        canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+                    }
+
+                $(window).resize(resizeCanvas);
+               
                     function radians_to_degrees(radians)
                     {
                       var pi = Math.PI;
@@ -156,33 +180,35 @@
                     }
 //                    r=document.getElementById(\"R\").value;
                     
-                    if(saved == null){
+//                    if(saved == null){
+//                        var car = new fabric.Circle({
+//                                                        left:100,
+//                                                        top:390,                
+//                                                        radius:30,
+//                                                        stroke:'red',
+//                                                        strokeWidth:3,
+//                                                        fill:'red'
+//                                                    });
+//                    }else{
                         var car = new fabric.Circle({
-                                                        left:100,
+                                                        left:900*lastRs[1],
                                                         top:390,                
                                                         radius:30,
                                                         stroke:'red',
                                                         strokeWidth:3,
                                                         fill:'red'
                                                     });
-                    }else{
-                        var car = new fabric.Circle({
-                                                        left:900*saved,
-                                                        top:390,                
-                                                        radius:30,
-                                                        stroke:'red',
-                                                        strokeWidth:3,
-                                                        fill:'red'
-                                                    });
-                    }
+//                    }
                     console.log(r);
                    
 
                     
                     
 
-                    var canvas = new fabric.Canvas('animationCanvas',{backgroundColor: 'rgb(255,255,255)'});
-                    var road = new fabric.Rect({left:100,top:450,fill:'black',width:800,height:10});
+                    var canvas = new fabric.Canvas('theCanvas',{backgroundColor: 'rgb(255,255,255)',
+                      width: 1060,
+                    height: 600});
+                    var road = new fabric.Rect({left:25,top:450,fill:'black',width:1000,height:10});
                     var pendullum =new fabric.Group([car]);
                     
                     canvas.add(road);
@@ -204,17 +230,26 @@
 
                     
                     
+//                    alert(\"nesprávny api-key\");
                     
                     
                     
                     
                     
-                    
-                });//koniec $.document
+ 
                             
             } //konec handle             
                         
 </script>";
+    }else{
+        echo "<script>
+        $(document).ready(function(){
+                    $(\"#graphDiv\").hide();
+                    $(\"#graphLabel\").hide();
+                    $(\"#animation\").hide();
+                
+            });
+        </script>";
 
     }
 
@@ -274,14 +309,15 @@
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox1">Graf</label>
                     </div>
                     <div class="form-check form-check-inline ml-5">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
+                    <input type="hidden" id="lastR" name="lastR" value="0">
                 </div>
                 <div class="col-1 mt-5">
                     <button type="submit" class="btn btn-outline-primary">Skompilovať</button>
@@ -292,17 +328,36 @@
             </div>
         </form>
 
-        <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
+        <label for="graphDiv" id="graphLabel"><h3>Výsledok</h3></label>
+        <br>
+        <div class="col-12" id="graphDiv" style="width: 100%;height:500px"></div>
 
 
+
+        <div id="animation" class="fabric-canvas-wrapper">
+            <hr>
+            <label for="animation"><h3>Animácia</h3></label><br>
+            <canvas id="theCanvas"></canvas>
         </div>
 
-        <div class="col-12" id="animationDiv" style="width:1000px;height:600px;">
-            <canvas width="1000" height="600" id="animationCanvas"></canvas>>
-        </div>
     </div>
+</div>
 
 
+
+
+
+    <script>
+        $(document).ready(function(){
+            $("#inlineCheckbox1").click(function(){
+                $("#graphDiv").toggle();
+                $("#graphLabel").toggle();
+            });
+            $("#inlineCheckbox2").click(function(){
+                $("#animation").toggle();
+            });
+        });
+    </script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>

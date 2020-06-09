@@ -25,7 +25,7 @@
 
     <?php
 
-    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aa";
 
 
     if (isset($_GET['R'])&&$_GET['R']>=0&&$_GET['R']<=1) {
@@ -34,7 +34,7 @@
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },
@@ -45,7 +45,7 @@
                 });    
                         
            function handle(msg) {
-               if(msg===\"unauthorized\"){
+                if(msg.localeCompare('unauthorized')){
                     alert(\"nesprávny api-key\");
                     return;
                }
