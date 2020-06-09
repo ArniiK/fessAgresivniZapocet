@@ -1,12 +1,12 @@
 <?php
 
-include 'inc/mysql_config.php';
-
-
-if (isset($_GET['prikaz'])) {
-    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=5";
-    $mysqli->query($sql);
-}
+//include 'inc/mysql_config.php';
+//
+//
+//if (isset($_GET['prikaz'])) {
+//    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=5";
+//    $mysqli->query($sql);
+//}
 
 
 
@@ -21,6 +21,24 @@ if (isset($_GET['prikaz'])) {
     <link rel="stylesheet" href="style.css">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <?php
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
+
+    if (isset($_GET['prikaz'])) {
+    echo "<script>
+        $.ajax({
+            type: 'GET',
+            url: 'http://147.175.121.210:8039/zFinal2/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" . $_GET['prikaz'] . "',
+            success: function (msg) {
+                $(\"#output1\").html(msg);
+            }
+        });
+    </script>";
+
+    }
+
+    ?>
     <title>Záverečný projekt</title>
 </head>
 <body>
@@ -80,7 +98,7 @@ if (isset($_GET['prikaz'])) {
                 </div>
             </div>
         </form>
-        <div class="form-group">
+        <div id="output1" class="form-group">
             <label for="output"><h3>Výsledok</h3></label>
             <hr>
             <textarea class="form-control" id="output" name="output" rows="2" disabled></textarea>
