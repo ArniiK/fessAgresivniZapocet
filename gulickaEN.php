@@ -295,7 +295,7 @@ if (isset($_GET['prikaz'])) {
 
 
                 <div class="row col-12 ml-4">
-                    <div class="col-lg-2 col-md-2 col-xl-4 col-5"></div>
+                    <div class="col-lg-2 col-md-3 col-xl-4 col-5"></div>
                     <a class="nav-link  btn btn-dark col-xs-2" href="gulicka.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link active btn btn-dark col-xs-2" href="gulickaEN.php"><i id="ukIcon"></i></a>
                 </div>
