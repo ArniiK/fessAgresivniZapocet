@@ -38,9 +38,8 @@ if ($method == 'GET') {
 
             $sql = "INSERT INTO log (typ,command,error) VALUES
         ('prikaz','$command','0')";
+
             $mysqli->query($sql);
-
-
             echo $output;
 
             break;
@@ -108,6 +107,10 @@ if ($method == 'GET') {
                 echo $finalString;
             }else{
                 echo "unauthorized";
+                $r = $_GET['r'];
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('kyvadlo','$r','0','ERROR')";
+                $mysqli->query($sql);
 
             }
 
@@ -175,6 +178,9 @@ if ($method == 'GET') {
             }
             else{
                 echo "unauthorized";
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('tlmic','$r','0','ERROR')";
+                $mysqli->query($sql);
 
             }
             
@@ -239,6 +245,9 @@ if ($method == 'GET') {
             }
             else{
                 echo "unauthorized";
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('lietadlo','$r','0','ERROR')";
+                $mysqli->query($sql);
             }
             break;
 
@@ -307,6 +316,9 @@ if ($method == 'GET') {
 
             }else{
                 echo "unauthorized";
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('gulicka','$r','0','ERROR')";
+                $mysqli->query($sql);
 
             }
 

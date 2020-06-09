@@ -24,7 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>
     <?php
 
-    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aa";
 
     if (isset($_GET['R'])&&$_GET['R']>=0&&$_GET['R']<=1) {
 
@@ -178,6 +178,8 @@
                     }
 
                 $(window).resize(resizeCanvas);
+                resizeCanvas();
+
                
                     function radians_to_degrees(radians)
                     {
