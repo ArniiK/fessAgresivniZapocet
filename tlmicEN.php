@@ -2,11 +2,12 @@
 
 include 'inc/mysql_config.php';
 
-if (isset($_GET['prikaz'])) {
+
+if (isset($_GET['R'])) {
     $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=3";
     $mysqli->query($sql);
-}
 
+}
 ?>
 
 <!doctype html>
@@ -23,21 +24,38 @@ if (isset($_GET['prikaz'])) {
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <?php
 
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
     if (isset($_GET['R'])) {
         echo "<script>
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] ."',
+                     beforeSend: function(xhr) {
+                        xhr.setRequestHeader(\"api-key\", \"$key\"); 
+                      },
                     success: function (msg) {
                         handle(msg);                  
                     }
                 });    
                         
            function handle(msg) {
-                lastPos = [];    
+                               /** @deprecated  Pôvodna podmienka, ktorá bola vyhodnocovaná na každom serveri inak  */
+//            if(msg===\"unauthorized\"){
+//                    alert(\"nesprávny api - key\");
+//                    return;
+//              }
+               
+                lastPos = [];  
+                lastRs = [];
                 var arr = msg.split(\" \");       
-                arr.pop();
+                
+                if (arr.length < 20 ) 
+                {
+                    alert(\"nesprávny api - key\");
+                    return;
+                     }
+                
                 positions = [];
                 angles = [];
                 var pom=0;
@@ -48,14 +66,20 @@ if (isset($_GET['prikaz'])) {
                     }else if(arr[i]==\"endOfAng\"){
                         pom=2;
                         continue;
+                    }else if(arr[i]==\"endOfLastP\"){
+                        pom=3;
+                        continue;
                     }
                     if(pom==0){
                         positions.push(arr[i]);
                     }else if(pom==1){
                         angles.push(arr[i]);
-                    }else{
+                    }else if(pom==2){
                         lastPos.push(arr[i]);
+                    }else{
+                        lastRs.push(arr[i]);
                     }
+                 
                 } 
                 
                 $(document).ready(function() {
@@ -104,9 +128,7 @@ if (isset($_GET['prikaz'])) {
                         }
                     };
                     var config = {responsive: true};
-                
-                    
-                    
+   
                     Plotly.newPlot(graphDiv, data, layout,config);
                     
                     var cnt = 0;                    
@@ -128,14 +150,13 @@ if (isset($_GET['prikaz'])) {
                     var lastPositions = \"\";
                     for (var i=0;i<lastPos.length;i++) {
                         lastPositions = lastPositions + lastPos[i] + ':';
-                        console.log(lastPos[i]);
+                        
                     }
                     
                     
                     document.getElementById(\"last\").value = lastPositions;
-                     console.log('Last after: ' + document.getElementById(\"last\"));
-                    
-                    
+                    document.getElementById(\"lastR\").value = lastRs[0]; 
+      
                 });
                      
                      function resizeCanvas() {
@@ -159,7 +180,7 @@ if (isset($_GET['prikaz'])) {
                     width: 1050,
                     height: 400
                 });
-
+                resizeCanvas();
                 var autoImg = new Image();
                 var kolesaImg = new Image();
                 kolesaImg.src = kolesaURL;
@@ -178,17 +199,16 @@ if (isset($_GET['prikaz'])) {
                 kolesaImg.onload = function(img){
                 var kolesa = new fabric.Image(kolesaImg,{
                         left: 100,
-                        top: 10,
+                        top: 10 + (100* lastRs[1]),
                         scaleX: .50,
                         scaleY: .50
                 });  
                 canvas.add(kolesa);
-                console.log(positions);
                 
                 for(var i=0;i<positions.length;i++){
                     
                     kolesa.animate('top', + (100*positions[i]),{
-                        duration: 1000,
+                        duration: 3000,
                         onChange: canvas.renderAll.bind(canvas)
                 });
                         
@@ -277,6 +297,7 @@ if (isset($_GET['prikaz'])) {
                         <label class="form-check-label" for="inlineCheckbox2">Animation</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
+                    <input type="hidden" id="lastR" name="lastR" value="0">
                 </div>
 
                 <div class="col-1 mt-5">
@@ -291,7 +312,7 @@ if (isset($_GET['prikaz'])) {
 
         <label for="graphDiv" id="graphLabel"><h3>Result</h3></label>
         <br>
-        <div id="graphDiv"></div>
+        <div class="col-12" id="graphDiv" style="width: 100%;height:500px"></div>
 
 
 

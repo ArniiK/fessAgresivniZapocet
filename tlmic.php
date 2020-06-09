@@ -1,12 +1,12 @@
 <?php
-//
-//include 'inc/mysql_config.php';
-//
-//if (isset($_GET['R'])) {
-//    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=3";
-//    $mysqli->query($sql);
-//
-//}
+
+include 'inc/mysql_config.php';
+
+if (isset($_GET['R'])) {
+    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=3";
+    $mysqli->query($sql);
+
+}
 
 ?>
 
@@ -32,14 +32,14 @@
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] ."',
+                    url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] ."',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },
                     
                     success: function (msg) {
                         handle(msg); 
-                        console.log(msg);
+                        
                     }
                 });    
                         
@@ -52,8 +52,7 @@
                 lastPos = []; 
                 lastRs = [];
                 var arr = msg.split(\" \");       
-//                arr.pop();
-//                console.log(arr);
+
                   if (arr.length < 20 ) 
                 {
                     alert(\"nesprávny api - key\");
@@ -130,9 +129,7 @@
                         }
                     };
                     var config = {responsive: true};
-                
-                    
-                    
+
                     Plotly.newPlot(graphDiv, data, layout,config);
                     
                     var cnt = 0;                    
@@ -154,15 +151,11 @@
                     var lastPositions = \"\";
                     for (var i=0;i<lastPos.length;i++) {
                         lastPositions = lastPositions + lastPos[i] + ':';
-                        console.log(lastPos[i]);
+                        
                     }
-                    
-                    
+
                     document.getElementById(\"last\").value = lastPositions; 
                     document.getElementById(\"lastR\").value = lastRs[0]; 
-                    
-//                     console.log('Last after: ' + document.getElementById(\"last\"));
-                    
                     
                 });
                      
@@ -180,6 +173,7 @@
                     }
 
                 $(window).resize(resizeCanvas);
+                
                      
                 var autoURL = 'icons/auto.png';
                 var kolesaURL = 'icons/kolesa.png';
@@ -187,7 +181,7 @@
                     width: 1050,
                     height: 400
                 });
-
+                resizeCanvas();
                 var autoImg = new Image();
                 var kolesaImg = new Image();
                 kolesaImg.src = kolesaURL;
@@ -211,12 +205,11 @@
                         scaleY: .50
                 });  
                 canvas.add(kolesa);
-                console.log(positions);
                 
                 for(var i=0;i<positions.length;i++){
                     
                     kolesa.animate('top', + (100*positions[i]),{
-                        duration: 1000,
+                        duration: 3000,
                         onChange: canvas.renderAll.bind(canvas)
                 });
                         
