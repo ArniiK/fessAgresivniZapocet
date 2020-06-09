@@ -1,11 +1,11 @@
 <?php
 
-//include 'inc/mysql_config.php';
-//
-//if (isset($_GET['prikaz'])) {
-//    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=2";
-//    $mysqli->query($sql);
-//}
+include 'inc/mysql_config.php';
+
+if (isset($_GET['prikaz'])) {
+    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=2";
+    $mysqli->query($sql);
+}
 
 ?>
 
@@ -24,7 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>
     <?php
 
-    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aa";
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
 
     if (isset($_GET['R'])&&$_GET['R']>=0&&$_GET['R']<=1) {
 
@@ -89,7 +89,7 @@
                         x: [],
                         y: [],
                         type: 'scatter',
-                        name: 'poloha kyvadla',
+                        name: 'aktuálna pozícia guličky',
                         line: {
                             shape: 'spline',
                             smoothing: 1.3,
@@ -101,7 +101,7 @@
                         x: [],
                         y: [],
                         type: 'scatter',
-                        name: 'uhol kyvadlovej tyče',
+                        name: 'aktuálny náklon tyče',
                         line: {
                             shape: 'spline',
                             smoothing: 1.3,
@@ -113,9 +113,9 @@
                     var data = [ trace1,trace2];
                 
                     var layout = {
-                        title:'Prevrátené kyvadlo',
+                        title:'Gulička na tyči',
                         xaxis: {
-                            title: 'HEJ',
+                            title: 'Posun',
                             range: [0,200]
                         },
                         yaxis: {
@@ -178,7 +178,6 @@
                     }
 
                 $(window).resize(resizeCanvas);
-                resizeCanvas();
 
                
                     function radians_to_degrees(radians)

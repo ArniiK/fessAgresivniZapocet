@@ -61,6 +61,112 @@
 
         <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
 
+        <hr>
+        <table class="table">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Peter Kopúň</th>
+                <th scope="col">Marek Kravčišin</th>
+                <th scope="col">Arne Michalov</th>
+                <th scope="col">Marek Šulhánek</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row">Front-end</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+            </tr>
+            <tr>
+                <th scope="row">PDF</th>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">E-mail</th>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Api-key</th>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Git-hub</th>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Štruktúra API</th>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Štatistika</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+            </tr>
+            <tr>
+                <th scope="row">Logy</th>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Príkazy</th>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Kyvadlo</th>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Gulička</th>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th scope="row">Tlmič</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+            </tr>
+            <tr>
+                <th scope="row">Lietadlo</th>
+                <td><input type="checkbox" checked disabled class="ml-5"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tbody>
+        </table>
+
     </div>
 
 </div>

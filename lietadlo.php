@@ -35,7 +35,6 @@ if (isset($_GET['R'])) {
                         xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },
             success: function (msg) {
-                console.log(msg);
                 handle(msg);
             }
         });
@@ -185,8 +184,6 @@ if (isset($_GET['R'])) {
             var lastDeg =  lastRs[1] * (180/pi);
             var currDeg = lastRs[0] * (180/pi);           
             var currFlapDeg = angles[200] * (180/pi);
-            console.log(angles);
-            console.log(currFlapDeg);
             var jetURL = 'icons/jet.png';
             var flapURL= 'icons/flap.png';
             
@@ -236,6 +233,8 @@ if (isset($_GET['R'])) {
               };
             jetImg.src = jetURL;
             flapImg.src = flapURL;
+            
+            resizeCanvas();
         } //konec handle             
 
     </script>";
