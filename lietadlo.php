@@ -21,6 +21,9 @@ if (isset($_GET['R'])) {
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"> </script>
     <?php
+
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
+
     if (isset($_GET['R'])) {
 
     echo "<script>
@@ -28,6 +31,9 @@ if (isset($_GET['R'])) {
         $.ajax({
             type: 'GET',
             url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+            beforeSend: function(xhr) {
+                        xhr.setRequestHeader(\"api - key\", \"$key\"); 
+                      },
             success: function (msg) {
                 console.log(msg);
                 handle(msg);
@@ -35,6 +41,11 @@ if (isset($_GET['R'])) {
         });
 
         function handle(msg) {
+             if(msg===\"unauthorized\"){
+                    alert(\"nesprávny api-key\");
+                    return;
+               }
+               
             lastPos = [];
             lastRs = [];
             var arr = msg.split(\" \");       

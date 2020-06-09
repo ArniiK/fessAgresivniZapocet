@@ -28,7 +28,7 @@ if (isset($_GET['R'])) {
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
                     success: function (msg) {
                         console.log(msg);
                         handle(msg);                  
@@ -36,9 +36,10 @@ if (isset($_GET['R'])) {
                 });    
                         
            function handle(msg) {
-                lastPos = [];    
+                lastPos = []; 
+                 lastRs = [];
                 var arr = msg.split(\" \");       
-                arr.pop();
+                //arr.pop();
                 positions = [];
                 angles = [];
                 var pom=0;
@@ -46,19 +47,26 @@ if (isset($_GET['R'])) {
                     if(arr[i]==\"endOfPos\"){
                         pom=1;
                         continue;
-                    }else if(arr[i]==\"endOfAng\"){
-                        pom=2;
-                        continue;
+                   }else if(arr[i]==\"endOfAng\"){
+                    pom=2;
+                    continue;
+                }else if (arr[i]==\"endOfLastP\"){
+                    pom=3;
+                    continue;
                     }
+            
                     if(pom==0){
                         positions.push(arr[i]);
                     }else if(pom==1){
                         angles.push(arr[i]);
-                    }else{
+                   }else if (pom==2){
                         lastPos.push(arr[i]);
                     }
-                } 
-                
+                    else {
+                        lastRs.push(arr[i]);
+                    }
+                }
+                    
                 $(document).ready(function() {
                     var  trace1 = {
                         x: [],
@@ -128,16 +136,103 @@ if (isset($_GET['R'])) {
                     var lastPositions = \"\";
                     for (var i=0;i<lastPos.length;i++) {
                         lastPositions = lastPositions + lastPos[i] + ':';
-                        console.log(lastPos[i]);
                     }
                                        
                     document.getElementById(\"last\").value = lastPositions;                   
+                    document.getElementById(\"lastR\").value = lastRs[0];            
+        
                 });
+                    
+                    function resizeCanvas() {
+                        const outerCanvasContainer = $('.fabric-canvas-wrapper')[0];
+    
+                        const ratio = canvas.getWidth() / canvas.getHeight();
+                        const containerWidth   = outerCanvasContainer.clientWidth;
+                        const containerHeight  = outerCanvasContainer.clientHeight;
+
+                        const scale = containerWidth / canvas.getWidth();
+                        const zoom  = canvas.getZoom() * scale;
+                        canvas.setDimensions({width: containerWidth, height: containerWidth / ratio});
+                        canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+                    }
+
+                $(window).resize(resizeCanvas);
+                     
+            var pi = Math.PI;
+            var lastDeg =  lastRs[1] * (180/pi);
+            var currDeg = lastRs[0] * (180/pi);           
+            var currFlapDeg = angles[200] * (180/pi);
+            console.log(angles);
+            console.log(currFlapDeg);
+            var jetURL = 'icons/jet.png';
+            var flapURL= 'icons/flap.png';
+            
+            var canvas = new fabric.Canvas('theCanvas',{
+                    width: 1050,
+                    height: 400
+                });
+           
+            var jetImg = new Image();
+            var flapImg = new Image();         
+            jetImg.onload = function () {  
+                console.log('BLABLABLA');               
+                var jet = new fabric.Image(jetImg, {
+                    left: 200, 
+                    top: 200,
+                    scaleX: .50,
+                    scaleY: .50,
+                    originX: 'center',
+                    originY: 'center' 
+                });
+               
+                var flap = new fabric.Image(flapImg, {
+                    left: 20, 
+                    top: 170,
+                    scaleX: .50,
+                    scaleY: .50, 
+                    originX: 'center',
+                    originY: 'center' 
+                });
+                
+                var group = new fabric.Group([ jet, flap ], {
+                    angle: lastDeg,
+                    originX: 'center',
+                    originY: 'center' 
+                });
+                canvas.add(group);
+         
+                group.animate('angle', currDeg, {
+                    duration: 2000,
+                    onChange: canvas.renderAll.bind(canvas)
+                } );  
+              
+                flap.animate('angle', currFlapDeg*10, {
+                    duration: 2000,
+                    onChange: canvas.renderAll.bind(canvas)
+                } ) ;
+                
+              };
+            jetImg.src = jetURL;
+            flapImg.src = flapURL;  
+                    
+                    
+                    
                             
             } //konec handle             
                         
 </script>";
 
+    }
+
+    else{
+        echo "<script>
+        $(document).ready(function(){
+                    $(\"#graphDiv\").hide();
+                    $(\"#graphLabel\").hide();
+                    $(\"#animation\").hide();
+                
+            });
+        </script>";
     }
 
     ?>
@@ -197,14 +292,15 @@ if (isset($_GET['R'])) {
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox1">Chart</label>
                     </div>
                     <div class="form-check form-check-inline ml-5">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox2">Animation</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
+                    <input type="hidden" id="lastR" name="lastR" value="0">
                 </div>
                 <div class="col-1 mt-5">
                     <button type="submit" class="btn btn-outline-primary">Send</button>
@@ -216,6 +312,26 @@ if (isset($_GET['R'])) {
             <br>
             <div class="col-12" id="graphDiv" style="width: 100%;height:500px">
         </div>
+
+        <div id="animation" class="fabric-canvas-wrapper">
+            <hr>
+            <label for="animation"><h3>Animation</h3></label><br>
+            <canvas id="theCanvas"></canvas>
+        </div>
+
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $("#inlineCheckbox1").click(function(){
+            $("#graphDiv").toggle();
+            $("#graphLabel").toggle();
+        });
+        $("#inlineCheckbox2").click(function(){
+            $("#animation").toggle();
+        });
+    });
+</script>
 </div>
 
 
