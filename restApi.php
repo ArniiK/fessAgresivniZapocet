@@ -36,6 +36,11 @@ if ($method == 'GET') {
 
             $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
 
+            $sql = "INSERT INTO log (typ,command,error) VALUES
+        ('prikaz','$command','0')";
+            $mysqli->query($sql);
+
+
             echo $output;
 
             break;
@@ -53,6 +58,9 @@ if ($method == 'GET') {
                 $lastP = [];
                 $lastR = $_GET['lastR'];
                 $r = $_GET['r'];
+                $sql = "INSERT INTO log (typ,command,error) VALUES
+        ('kyvadlo','$r','0')";
+                $mysqli->query($sql);
                 $last = $_GET['last'];
                 if ($last === '0')
                     $lastP = [0,0,0,0];
@@ -109,6 +117,9 @@ if ($method == 'GET') {
         case "getDataTlmic":
             $lastP = [];
             $r = $_GET['r'];
+            $sql = "INSERT INTO log (typ,command,error) VALUES
+        ('tlmic','$r','0')";
+            $mysqli->query($sql);
             $last = $_GET['last'];
             if ($last === '0')
                 $lastP = [0,0,0,0,0];
@@ -155,6 +166,11 @@ if ($method == 'GET') {
             $lastR = $_GET['lastR'];
             $lastP = [];
             $r = $_GET['r'];
+            $sql = "INSERT INTO log (typ,command,error) VALUES
+        ('lietadlo','$r','0')";
+            $mysqli->query($sql);
+
+
             $last = $_GET['last'];
             if ($last === '0')
                 $lastP = [0,0,0];
@@ -199,6 +215,9 @@ if ($method == 'GET') {
         case "getDataGulicka":
             $lastP = [];
             $r = $_GET['r'];
+            $sql = "INSERT INTO log (typ,command,error) VALUES
+        ('gulicka','$r','0')";
+            $mysqli->query($sql);
             $last = $_GET['last'];
             if ($last === '0')
                 $lastP = [0,0,0,0];
