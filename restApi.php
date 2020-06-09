@@ -32,16 +32,28 @@ if ($method == 'GET') {
 
     switch ($_GET["action"]) {
         case "vykonajPrikaz":
-            $command = urldecode($_GET['prikaz']);
-            $command = preg_replace('/\s+/', '+', $command);
+            $apiKeyFromHeader = "";
+            foreach (getallheaders() as $name => $value) {
+                if($name==="api-key"){
+                    $apiKeyFromHeader=$value;
+                }
+            }
 
-            $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
+            if($apiKeyFromHeader===$apiKey) {
+                $command = urldecode($_GET['prikaz']);
+                $command = preg_replace('/\s+/', '+', $command);
 
-            $sql = "INSERT INTO log (typ,command,error) VALUES
+                $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;' . $command . '"'));
+
+                $sql = "INSERT INTO log (typ,command,error) VALUES
         ('prikaz','$command','0')";
-            $mysqli->query($sql);
+                $mysqli->query($sql);
 
-            echo $output;
+                echo $output;
+            }
+            else{
+                echo "0";
+            }
 
             break;
         case "getDataKyvadlo":

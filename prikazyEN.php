@@ -27,13 +27,30 @@ if (isset($_GET['prikaz'])) {
         $.ajax({
             type: 'GET',
             url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" . $_GET['prikaz'] . "',
+            beforeSend: function(xhr) {
+            xhr.setRequestHeader(\"api-key\", \"$key\"); 
+            },
             success: function (msg) {
-                $(\"#output1\").html(msg);
+//                $(\"#output1\").html(msg);
                 console.log(msg);
+                handle(msg);
                 
             }
         });
-                
+               
+        function handle(msg) {
+            console.log(msg.length);
+            if (msg.length < 4)
+                {
+                     alert('Zly API kluc'); 
+                }
+            else
+                {
+                    console.log('OK');
+                    $(\"#output1\").html(msg);
+                }
+            
+        }
                 
     </script>";
 
