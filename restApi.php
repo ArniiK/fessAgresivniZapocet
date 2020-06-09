@@ -58,8 +58,8 @@ if ($method == 'GET') {
                 $lastP = [];
                 $lastR = $_GET['lastR'];
                 $r = $_GET['r'];
-                $sql = "INSERT INTO log (typ,command,error) VALUES
-        ('kyvadlo','$r','0')";
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('kyvadlo','$r','0','OK')";
                 $mysqli->query($sql);
                 $last = $_GET['last'];
                 if ($last === '0')
@@ -116,22 +116,32 @@ if ($method == 'GET') {
 
             break;
         case "getDataTlmic":
-            $lastP = [];
-            $r = $_GET['r'];
-            $sql = "INSERT INTO log (typ,command,error) VALUES
-        ('tlmic','$r','0')";
-            $mysqli->query($sql);
-            $last = $_GET['last'];
-            if ($last === '0')
-                $lastP = [0,0,0,0,0];
-            else {
-                $lastArr = preg_split('/:/', $last);
-                array_pop($lastArr);
-                foreach ($lastArr as $lastPos) {
-                    array_push($lastP, $lastPos);
+
+            $apiKeyFromHeader = "";
+            foreach (getallheaders() as $name => $value) {
+                if($name==="api-key"){
+                    $apiKeyFromHeader=$value;
                 }
             }
-            $command = "
+
+            if($apiKeyFromHeader===$apiKey) {
+                $lastP = [];
+                $lastR = $_GET['lastR'];
+                $r = $_GET['r'];
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('tlmic','$r','0','OK')";
+                $mysqli->query($sql);
+                $last = $_GET['last'];
+                if ($last === '0')
+                    $lastP = [0, 0, 0, 0, 0];
+                else {
+                    $lastArr = preg_split('/:/', $last);
+                    array_pop($lastArr);
+                    foreach ($lastArr as $lastPos) {
+                        array_push($lastP, $lastPos);
+                    }
+                }
+                $command = "
                         m1 = 2500; m2 = 320;
                         k1 = 80000; k2 = 500000;
                         b1 = 350; b2 = 15020;
@@ -146,7 +156,7 @@ if ($method == 'GET') {
                         
                         t = 0:0.01:5;
                          r = " . $r . ";
-                        [y,t,x]=lsim(sys*[0;1],r*ones(size(t)),t,[". implode(",", $lastP) ."]);
+                        [y,t,x]=lsim(sys*[0;1],r*ones(size(t)),t,[" . implode(",", $lastP) . "]);
                         disp(x(:,1))
                         disp('endOfPos')
                         disp(x(:,3)) 
@@ -154,15 +164,22 @@ if ($method == 'GET') {
                         disp(x(size(x,1),:))
                         ";
 
-            $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
-            $oparray = preg_split('/\s+/', trim($output));
-            $finalString="";
-            foreach ($oparray as $entry){
-                $finalString =$finalString . $entry . " ";
+                $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;' . $command . '"'));
+                $oparray = preg_split('/\s+/', trim($output));
+                $finalString = "";
+                foreach ($oparray as $entry) {
+                    $finalString = $finalString . $entry . " ";
+                }
+                $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
+                echo $finalString;
+            }
+            else{
+                echo "unauthorized";
+
             }
             
+        break;
 
-            break;
         case "getDataLietadlo":
             $apiKeyFromHeader = "";
             foreach (getallheaders() as $name => $value) {
@@ -175,8 +192,8 @@ if ($method == 'GET') {
                 $lastR = $_GET['lastR'];
                 $lastP = [];
                 $r = $_GET['r'];
-                $sql = "INSERT INTO log (typ,command,error) VALUES
-        ('lietadlo','$r','0')";
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('lietadlo','$r','0','OK')";
                 $mysqli->query($sql);
 
 
@@ -241,8 +258,8 @@ if ($method == 'GET') {
                 $lastP = [];
                 $lastR = $_GET['lastR'];
                 $r = $_GET['r'];
-                $sql = "INSERT INTO log (typ,command,error) VALUES
-        ('gulicka','$r','0')";
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('gulicka','$r','0','OK')";
                 $mysqli->query($sql);
                 $last = $_GET['last'];
                 if ($last === '0')

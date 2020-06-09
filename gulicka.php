@@ -24,7 +24,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>
     <?php
 
-    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aa";
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
 
     if (isset($_GET['R'])&&$_GET['R']>=0&&$_GET['R']<=1) {
 
@@ -45,13 +45,19 @@
                 r=0;
                         
            function handle(msg) {
-                 if(msg.localeCompare('unauthorized')){
-                    alert(\"nesprávny api-key\");
-                    return;
-               }
+                /** @deprecated  Pôvodna podmienka, ktorá bola vyhodnocovaná na každom serveri inak  */
+//            if(msg===\"unauthorized\"){
+//                    alert(\"nesprávny api - key\");
+//                    return;
+//              }
                 lastPos = [];    
                  lastRs = [];
-                var arr = msg.split(\" \");       
+                var arr = msg.split(\" \");
+                            if (arr.length < 20 ) 
+                {
+                    alert(\"nesprávny api - key\");
+                    return;
+                     }       
 
                 positions = [];
                 angles = [];

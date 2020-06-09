@@ -24,39 +24,63 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <?php
 
+
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
     if (isset($_GET['R'])) {
         echo "<script>
         
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8067/skuskoveZadanie/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "',
+                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/tlmic?action=getDataTlmic&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] ."',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(\"api-key\", \"$key\"); 
+                      },
+                    
                     success: function (msg) {
-                        handle(msg);                  
+                        handle(msg); 
+                        console.log(msg);
                     }
                 });    
                         
            function handle(msg) {
-                lastPos = [];    
+                /** @deprecated  Pôvodna podmienka, ktorá bola vyhodnocovaná na každom serveri inak  */
+//            if(msg===\"unauthorized\"){
+//                    alert(\"nesprávny api - key\");
+//                    return;
+//              }
+                lastPos = []; 
+                lastRs = [];
                 var arr = msg.split(\" \");       
-                arr.pop();
+//                arr.pop();
+//                console.log(arr);
+                  if (arr.length < 20 ) 
+                {
+                    alert(\"nesprávny api - key\");
+                    return;
+                     }
                 positions = [];
                 angles = [];
                 var pom=0;
                 for(var i=0;i<arr.length;i++){
-                    if(arr[i]==\"endOfPos\"){
+              if(arr[i]==\"endOfPos\"){
                         pom=1;
                         continue;
                     }else if(arr[i]==\"endOfAng\"){
                         pom=2;
+                        continue;
+                    }else if(arr[i]==\"endOfLastP\"){
+                        pom=3;
                         continue;
                     }
                     if(pom==0){
                         positions.push(arr[i]);
                     }else if(pom==1){
                         angles.push(arr[i]);
-                    }else{
+                    }else if(pom==2){
                         lastPos.push(arr[i]);
+                    }else{
+                        lastRs.push(arr[i]);
                     }
                 } 
                 
@@ -134,8 +158,10 @@
                     }
                     
                     
-                    document.getElementById(\"last\").value = lastPositions;
-                     console.log('Last after: ' + document.getElementById(\"last\"));
+                    document.getElementById(\"last\").value = lastPositions; 
+                    document.getElementById(\"lastR\").value = lastRs[0]; 
+                    
+//                     console.log('Last after: ' + document.getElementById(\"last\"));
                     
                     
                 });
@@ -180,7 +206,7 @@
                 kolesaImg.onload = function(img){
                 var kolesa = new fabric.Image(kolesaImg,{
                         left: 100,
-                        top: 10,
+                        top: 10 + (100* lastRs[1]),
                         scaleX: .50,
                         scaleY: .50
                 });  
@@ -281,6 +307,7 @@
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
+                    <input type="hidden" id="lastR" name="lastR" value="0">
                 </div>
 
                 <div class="col-1 mt-5">
