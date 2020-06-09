@@ -34,12 +34,12 @@
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },
                     success: function (msg) {
-                        console.log(msg);
+//                        console.log(msg);
                         handle(msg);                  
                     }
                 });    
@@ -58,7 +58,7 @@
 
             if (arr.length < 20 ) 
                 {
-                    alert(\"nesprávny api - key\");
+                    alert(\"nesprávny api-key\");
                     return;
                      }
                 
@@ -157,7 +157,6 @@
                     var lastPositions = \"\";
                     for (var i=0;i<lastPos.length;i++) {
                         lastPositions = lastPositions + lastPos[i] + ':';
-//                        console.log(lastPos[i]);
                     }
                     
                     
@@ -166,7 +165,6 @@
                     
                  });//koniec $.document 
                     
-//                    r=document.getElementById(\"R\").value;
                     
                     function resizeCanvas() {
                         const outerCanvasContainer = $('.fabric-canvas-wrapper')[0];
@@ -184,7 +182,7 @@
                 $(window).resize(resizeCanvas);
                    
                     
-                   
+                  
                     var car = new fabric.Rect({left:900*lastRs[1],top:420,fill:'red',width:100,height:70});
                     var bar = new fabric.Rect({left:900*lastRs[1]+50,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
                     var leftWall = new fabric.Rect({left:0,top:400,fill:'brown',width:25,height:200});
@@ -195,13 +193,12 @@
                     var road = new fabric.Rect({left:25,top:450,fill:'black',width:1000,height:10});
                     
                     var pendullum =new fabric.Group([car,bar]);
-                    
+                    resizeCanvas();
                     canvas.add(road);
 
                     canvas.add(pendullum);
                     canvas.add(leftWall);
                     canvas.add(rightWall);
-//                    canvas.add(bar);
                     for(var j=0;j<positions.length;j++)
                     {
                         pendullum.animate('left', 25+900*positions[j] ,{
@@ -217,7 +214,7 @@
 //                            onChange: canvas.renderAll.bind(canvas)});
                        
                         
-                        console.log(deg);
+//                        console.log(deg);
                     }
               
             } //konec handle             

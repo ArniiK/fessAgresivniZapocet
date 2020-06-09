@@ -32,8 +32,7 @@ if (isset($_GET['R'])) {
         $.ajax({
                     type: 'GET',
                     url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
-                    success: function (msg) {
-                        console.log(msg);
+                    success: function (msg) {                       
                         handle(msg);                  
                     }
                 });    
@@ -177,8 +176,6 @@ if (isset($_GET['R'])) {
             var lastDeg =  lastRs[1] * (180/pi);
             var currDeg = lastRs[0] * (180/pi);           
             var currFlapDeg = angles[200] * (180/pi);
-            console.log(angles);
-            console.log(currFlapDeg);
             var jetURL = 'icons/jet.png';
             var flapURL= 'icons/flap.png';
             
@@ -229,7 +226,7 @@ if (isset($_GET['R'])) {
             jetImg.src = jetURL;
             flapImg.src = flapURL;  
                     
-                    
+            resizeCanvas();       
                     
                             
             } //konec handle             
