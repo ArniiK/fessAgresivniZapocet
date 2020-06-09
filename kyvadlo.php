@@ -25,6 +25,8 @@
 
     <?php
 
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
+
 
     if (isset($_GET['R'])) {
 
@@ -34,7 +36,7 @@
                     type: 'GET',
                     url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
                     beforeSend: function(xhr) {
-                        xhr.setRequestHeader(\"api-key\", \"082462e1-1d1b-41f7-95cf-bb0cc8e22aad\"); 
+                        xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },
                     success: function (msg) {
                         console.log(msg);
@@ -149,9 +151,26 @@
                     document.getElementById(\"last\").value = lastPositions;
                     document.getElementById(\"lastR\").value = lastRs[0]; 
                     
-                    
+                 });//koniec $.document 
                     
 //                    r=document.getElementById(\"R\").value;
+                    
+                    function resizeCanvas() {
+                        const outerCanvasContainer = $('.fabric-canvas-wrapper')[0];
+    
+                        const ratio = canvas.getWidth() / canvas.getHeight();
+                        const containerWidth   = outerCanvasContainer.clientWidth;
+                        const containerHeight  = outerCanvasContainer.clientHeight;
+
+                        const scale = containerWidth / canvas.getWidth();
+                        const zoom  = canvas.getZoom() * scale;
+                        canvas.setDimensions({width: containerWidth, height: containerWidth / ratio});
+                        canvas.setViewportTransform([zoom, 0, 0, zoom, 0, 0]);
+                    }
+
+                $(window).resize(resizeCanvas);
+                   
+                    
                     
                     if(lastRs[1]!=0){
                         var car = new fabric.Rect({left:900*lastRs[1],top:420,fill:'red',width:100,height:70});
@@ -164,7 +183,9 @@
 
 //                    var car = new fabric.Rect({left:100,top:420,fill:'red',width:100,height:70});
 //                    console.log(r);
-                    var canvas = new fabric.Canvas('animationCanvas',{backgroundColor: 'rgb(100,100,100)'});
+                    var canvas = new fabric.Canvas('theCanvas',{backgroundColor: 'rgb(100,100,100)',
+                      width: 1000,
+                    height: 600});
                     var road = new fabric.Rect({left:100,top:450,fill:'black',width:800,height:10});
                     
                     var pendullum =new fabric.Group([car,bar]);
@@ -190,19 +211,20 @@
                         
                         console.log(deg);
                     }
-                    
-                    
-                    
-                    
-                    
-                                      
-                    
-                });//koniec $.document
-                            
+              
             } //konec handle             
                         
 </script>";
 
+    }else{
+        echo "<script>
+        $(document).ready(function(){
+                    $(\"#graphDiv\").hide();
+                    $(\"#graphLabel\").hide();
+                    $(\"#animation\").hide();
+                
+            });
+        </script>";
     }
 
     ?>
@@ -263,11 +285,11 @@
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox1">Graf</label>
                     </div>
                     <div class="form-check form-check-inline ml-5">
-                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+                        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" checked <?php echo isset($_GET['R']) ?  "" : "disabled";?>>
                         <label class="form-check-label" for="inlineCheckbox2">Animácia</label>
                     </div>
                     <input type="hidden" id="last" name="last" value="0">
@@ -280,21 +302,38 @@
                 </div>
             </div>
         </form>
-        <div class="col-12" id="graphDiv" style="width:1000px;height:600px;">
 
-        </div>
-        <div class="col-12" id="animationDiv" style="width:1000px;height:600px;">
-            <canvas width="1000" height="600" id="animationCanvas"></canvas>>
+
+        <label for="graphDiv" id="graphLabel"><h3>Výsledok</h3></label>
+        <br>
+        <div class="col-12" id="graphDiv" style="width: 100%;height:500px"></div>
+
+
+
+        <div id="animation" class="fabric-canvas-wrapper">
+            <hr>
+            <label for="animation"><h3>Animácia</h3></label><br>
+            <canvas id="theCanvas"></canvas>
         </div>
 
 
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        $("#inlineCheckbox1").click(function(){
+            $("#graphDiv").toggle();
+            $("#graphLabel").toggle();
+        });
+        $("#inlineCheckbox2").click(function(){
+            $("#animation").toggle();
+        });
+    });
+</script>
 
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js" integrity="sha384-CauSuKpEqAFajSpkdjv3z9t8E7RlpJ1UP0lKM/+NdtSarroVKu069AlsRPKkFBz9" crossorigin="anonymous"></script>
 <script>$(document).ready(function() { $('body').bootstrapMaterialDesign(); });</script>
