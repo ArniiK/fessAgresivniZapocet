@@ -293,11 +293,12 @@ if (isset($_GET['prikaz'])) {
                     </li>
                 </ul>
 
+
                 <div class="row col-12 ml-4">
-                    <a class="nav-link offset-4 btn btn-dark col-xs-2" href="gulicka.php"><i id="slovakiaIcon"></i></a>
+                    <div class="col-lg-2 col-md-2 col-xl-4 col-5"></div>
+                    <a class="nav-link  btn btn-dark col-xs-2" href="gulicka.php"><i id="slovakiaIcon"></i></a>
                     <a class="nav-link active btn btn-dark col-xs-2" href="gulickaEN.php"><i id="ukIcon"></i></a>
                 </div>
-
             </div>
         </nav>
     </div>

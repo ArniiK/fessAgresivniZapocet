@@ -30,7 +30,7 @@ if (isset($_GET['R'])) {
 
         $.ajax({
             type: 'GET',
-            url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+            url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
             beforeSend: function(xhr) {
                         xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },

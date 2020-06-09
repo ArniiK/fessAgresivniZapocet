@@ -32,7 +32,7 @@
 
         $.ajax({
                     type: 'GET',
-                    url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+                    url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
                     beforeSend: function(xhr) {
                         xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },

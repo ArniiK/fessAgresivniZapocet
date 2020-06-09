@@ -1,12 +1,12 @@
 <?php
 
-//include 'inc/mysql_config.php';
-//
-//
-//if (isset($_GET['prikaz'])) {
-//    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=5";
-//    $mysqli->query($sql);
-//}
+include 'inc/mysql_config.php';
+
+
+if (isset($_GET['prikaz'])) {
+    $sql = "UPDATE statistika SET pristupy = pristupy + 1 WHERE id=5";
+    $mysqli->query($sql);
+}
 
 
 
@@ -29,11 +29,15 @@
     echo "<script>
         $.ajax({
             type: 'GET',
-            url: 'http://147.175.121.210:8039/zFinal2/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" . $_GET['prikaz'] . "',
+            url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/prikazy?action=vykonajPrikaz&prikaz=" . $_GET['prikaz'] . "',
             success: function (msg) {
                 $(\"#output1\").html(msg);
+                console.log(msg);
+                
             }
         });
+                
+                
     </script>";
 
     }
