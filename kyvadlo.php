@@ -21,14 +21,14 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"></script>
 
     <?php
 
     $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
 
 
-    if (isset($_GET['R'])) {
+    if (isset($_GET['R'])&&$_GET['R']>=0&&$_GET['R']<=1) {
 
         echo "<script>
 
@@ -117,6 +117,12 @@
                         yaxis: {
                             title: 'R',
                             
+                        },
+                        legend:{
+                            xanchor:\"center\",
+                            yanchor:\"top\",
+                            y:-0.3, 
+                            x:0.5   
                         }
                     };
                     var config = {responsive: true};
@@ -279,7 +285,7 @@
         <form action="kyvadlo.php" method="get">
             <div class="form-group form-row">
                 <div class="col-md-4">
-                    <label for="prikaz"><h3>Zadajte príkaz</h3></label>
+                    <label for="prikaz"><h3>Zadajte R v intervale <0,1></h3></label>
                     <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R">
                     <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
                 </div>
