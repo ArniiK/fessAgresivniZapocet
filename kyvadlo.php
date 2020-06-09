@@ -177,32 +177,27 @@
                 $(window).resize(resizeCanvas);
                    
                     
-                    
-                    if(lastRs[1]!=0){
-                        var car = new fabric.Rect({left:900*lastRs[1],top:420,fill:'red',width:100,height:70});
-                        var bar = new fabric.Rect({left:900*lastRs[1]+50,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
-                        
-                    }else{
-                        var car = new fabric.Rect({left:100,top:420,fill:'red',width:100,height:70});
-                        var bar = new fabric.Rect({left:150,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
-                    }
-
-//                    var car = new fabric.Rect({left:100,top:420,fill:'red',width:100,height:70});
-//                    console.log(r);
+                   
+                    var car = new fabric.Rect({left:900*lastRs[1],top:420,fill:'red',width:100,height:70});
+                    var bar = new fabric.Rect({left:900*lastRs[1]+50,top:430, centeredRotation: false,  originX:'center', originY:'bottom',fill:'green',width:10,height:260});
+                    var leftWall = new fabric.Rect({left:0,top:400,fill:'brown',width:25,height:200});
+                    var rightWall = new fabric.Rect({left:1025,top:400,fill:'brown',width:25,height:200});
                     var canvas = new fabric.Canvas('theCanvas',{backgroundColor: 'rgb(100,100,100)',
-                      width: 1000,
+                      width: 1050,
                     height: 600});
-                    var road = new fabric.Rect({left:100,top:450,fill:'black',width:800,height:10});
+                    var road = new fabric.Rect({left:25,top:450,fill:'black',width:1000,height:10});
                     
                     var pendullum =new fabric.Group([car,bar]);
                     
                     canvas.add(road);
 
                     canvas.add(pendullum);
+                    canvas.add(leftWall);
+                    canvas.add(rightWall);
 //                    canvas.add(bar);
                     for(var j=0;j<positions.length;j++)
                     {
-                        pendullum.animate('left', 900*positions[j] ,{
+                        pendullum.animate('left', 25+900*positions[j] ,{
                             duration:3000,
                             onChange: canvas.renderAll.bind(canvas)});
                         var pi = Math.PI;
