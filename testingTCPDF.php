@@ -31,7 +31,6 @@ $pdf->Cell(20);
 ob_end_clean();
 $pdf->Output();
 
-echo "hello";
 
 
 //$pdf->AddPage();

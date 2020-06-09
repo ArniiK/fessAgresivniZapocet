@@ -45,14 +45,19 @@ if ($method == 'GET') {
 
                 $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;' . $command . '"'));
 
-                $sql = "INSERT INTO log (typ,command,error) VALUES
-        ('prikaz','$command','0')";
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('prikaz','$command','0','OK')";
                 $mysqli->query($sql);
 
                 echo $output;
             }
             else{
                 echo "0";
+                $command = urldecode($_GET['prikaz']);
+                $command = preg_replace('/\s+/', '+', $command);
+                $sql = "INSERT INTO log (typ,command,error,info) VALUES
+        ('prikaz',$command,'0','ERROR')";
+                $mysqli->query($sql);
             }
 
             break;

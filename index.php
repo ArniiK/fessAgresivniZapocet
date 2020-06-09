@@ -1,6 +1,3 @@
-<?php
-
-?>
 
 <!doctype html>
 <html lang="sk">
@@ -57,10 +54,14 @@
 <div class="container">
     <div class="jumbotron">
         <h1 class="display-4">Slovenská verzia</h1>
-        <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
         <hr class="my-4">
 
-        <p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
+        <p>Popis Rest API:  </p>
+        <p>Rest API umožňuje získavať dáta z CAS (Octave) do nami vytvoreného klientského prostredia pre každý model a samotné výsledky Octave príkazov.
+        V každom z jednotlivých prostredí front-end umožňuje dynamicky zadať parameter, na základe ktorého nám Octave vráti údaje výpočtu, podľa ktorého vykresľujeme grafy a animácie.
+        K API pristupujeme pomocou AJAX requestov, ktorého súčasťou sú: typ metódy, url, headers, v ktorom si posielame API kľúč, ktorý umožňuje prístup k API. Bez zadania API kľúča na stránke
+            nieje možné používať API.
+        </p>
 
         <hr>
         <table class="table">
@@ -168,6 +169,9 @@
             </tbody>
         </table>
 
+
+    <a href="testingTCPDF.php" class="btn btn-outline-primary">Generuj PDF logov</a>
+    <a href="generatePDFPopis.php" class="btn btn-outline-primary">Generuj PDF popisu </a>
     </div>
 
 </div>
