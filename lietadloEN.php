@@ -20,9 +20,12 @@ if (isset($_GET['R'])) {
     <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/4.0.0-beta.12/fabric.min.js"> </script>
     <?php
 
-    if (isset($_GET['R'])) {
+    $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
+
+    if (isset($_GET['R'])&&$_GET['R']>=-1&&$_GET['R']<=1) {
 
         echo "<script>
 
@@ -36,9 +39,21 @@ if (isset($_GET['R'])) {
                 });    
                         
            function handle(msg) {
-                lastPos = []; 
-                 lastRs = [];
-                var arr = msg.split(\" \");       
+                /** @deprecated  Pôvodna podmienka, ktorá bola vyhodnocovaná na každom serveri inak  */
+//            if(msg===\"unauthorized\"){
+//                    alert(\"nesprávny api - key\");
+//                    return;
+//              }
+               
+            lastPos = [];
+            lastRs = [];
+            var arr = msg.split(\" \");  
+            if (arr.length < 20 ) 
+                {
+                    alert(\"nesprávny api - key\");
+                    return;
+                     }
+                     
                 //arr.pop();
                 positions = [];
                 angles = [];
@@ -174,8 +189,7 @@ if (isset($_GET['R'])) {
            
             var jetImg = new Image();
             var flapImg = new Image();         
-            jetImg.onload = function () {  
-                console.log('BLABLABLA');               
+            jetImg.onload = function () {                            
                 var jet = new fabric.Image(jetImg, {
                     left: 200, 
                     top: 200,
@@ -288,7 +302,7 @@ if (isset($_GET['R'])) {
                 <div class="col-md-4">
                     <label for="prikaz"><h3>Insert value</h3></label>
                     <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R">
-                    <small id="emailHelp" class="form-text text-muted">Insert R here</small>
+                    <small id="emailHelp" class="form-text text-muted">Insert R here <-1,1></small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">

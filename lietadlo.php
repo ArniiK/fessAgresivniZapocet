@@ -24,13 +24,13 @@ if (isset($_GET['R'])) {
 
     $key ="082462e1-1d1b-41f7-95cf-bb0cc8e22aad";
 
-    if (isset($_GET['R'])) {
+    if (isset($_GET['R'])&&$_GET['R']>=0&&$_GET['R']<=1) {
 
     echo "<script>
 
         $.ajax({
             type: 'GET',
-            url: 'http://147.175.121.210:8060/fessAgresivniZapocet/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+            url: 'http://147.175.121.210:8038/final/restApi.php/kyvadlo?action=getDataLietadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
             beforeSend: function(xhr) {
                         xhr.setRequestHeader(\"api-key\", \"$key\"); 
                       },
@@ -120,7 +120,7 @@ if (isset($_GET['R'])) {
                 title:'Náklon lietadla',
                 xaxis: {
                     title: 'Čas',
-                    range: [0,200]
+                    range: [0,400]
                 },
                 yaxis: {
                     title: 'Uhol v rad'
@@ -151,7 +151,7 @@ if (isset($_GET['R'])) {
                 cnt++;
                 iterator++;
 
-                if(cnt === 200) clearInterval(interval);
+                if(cnt === 400) clearInterval(interval);
             }, 10);
 
             var lastPositions = \"\";
@@ -181,8 +181,6 @@ if (isset($_GET['R'])) {
 
                 $(window).resize(resizeCanvas);
                      
-            
-
             var pi = Math.PI;
             var lastDeg =  lastRs[1] * (180/pi);
             var currDeg = lastRs[0] * (180/pi);           
@@ -308,7 +306,7 @@ if (isset($_GET['R'])) {
                 <div class="col-md-4">
                     <label for="prikaz"><h3>Zadajte príkaz</h3></label>
                     <input type="number" step="0.01" class="form-control form-control-lg" name="R" id="R" placeholder="R" required>
-                    <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R</small>
+                    <small id="emailHelp" class="form-text text-muted">Sem zadajte vstupé R <-1,1></small>
                 </div>
                 <div class="col-md-5 mt-5 ml-5">
                     <div class="form-check form-check-inline">
