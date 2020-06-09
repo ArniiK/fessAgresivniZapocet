@@ -1,4 +1,5 @@
 <?php
+require_once "inc/mysql_config.php";
 session_start();
 error_reporting(0);
 // get the HTTP method, path and body of the request
@@ -39,21 +40,31 @@ if ($method == 'GET') {
 
             break;
         case "getDataKyvadlo":
-            $lastP = [];
-            $lastR = $_GET['lastR'];
-            $r = $_GET['r'];
-            $last = $_GET['last'];
-            if ($last === '0')
-                $lastP = [0,0,0,0];
-            else {
-                $lastArr = preg_split('/:/', $last);
-                array_pop($lastArr);
-                foreach ($lastArr as $lastPos) {
-                    array_push($lastP, $lastPos);
+            $apiKeyFromHeader = "";
+            foreach (getallheaders() as $name => $value) {
+                if($name==="api-key"){
+                    $apiKeyFromHeader=$value;
                 }
             }
 
-            $command = "M = .5;
+
+
+            if($apiKeyFromHeader===$apiKey){
+                $lastP = [];
+                $lastR = $_GET['lastR'];
+                $r = $_GET['r'];
+                $last = $_GET['last'];
+                if ($last === '0')
+                    $lastP = [0,0,0,0];
+                else {
+                    $lastArr = preg_split('/:/', $last);
+                    array_pop($lastArr);
+                    foreach ($lastArr as $lastPos) {
+                        array_push($lastP, $lastPos);
+                    }
+                }
+
+                $command = "M = .5;
                         m = 0.2;
                         b = 0.1;
                         I = 0.006;
@@ -67,26 +78,32 @@ if ($method == 'GET') {
                         K = lqr(A,B,C'*C,1);
                         Ac = [(A-B*K)];
                         N = -inv(C(1,:)*inv(A-B*K)*B);
-                        
+
                         sys = ss(Ac,B*N,C,D);
                         r = " . $r . ";
                         t = 0:0.05:10;
                         [y,t,x]=lsim(sys,r*ones(size(t)),t,[". implode(",", $lastP) ."]);
                         disp(x(:,1))
                         disp('endOfPos')
-                        disp(x(:,3)) 
+                        disp(x(:,3))
                         disp('endOfAng')
                         disp(x(size(x,1),:))
                         ";
 
-            $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
-            $oparray = preg_split('/\s+/', trim($output));
-            $finalString="";
-           foreach ($oparray as $entry){
-               $finalString =$finalString . $entry . " ";
-           }
-            $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
-           echo $finalString;
+                $output = ltrim(shell_exec('octave --no-gui --quiet --eval "pkg load control;'. $command .'"'));
+                $oparray = preg_split('/\s+/', trim($output));
+                $finalString="";
+                foreach ($oparray as $entry){
+                    $finalString =$finalString . $entry . " ";
+                }
+                $finalString = $finalString . "endOfLastP" . " " . $r . " " . $lastR;
+                echo $finalString;
+            }else{
+                echo "unauthorized";
+            }
+
+
+
 
             break;
         case "getDataTlmic":

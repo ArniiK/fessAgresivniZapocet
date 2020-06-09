@@ -25,6 +25,7 @@
 
     <?php
 
+
     if (isset($_GET['R'])) {
 
         echo "<script>
@@ -32,6 +33,9 @@
         $.ajax({
                     type: 'GET',
                     url: 'http://147.175.121.210:8039/zFinal2/restApi.php/kyvadlo?action=getDataKyvadlo&r=" . $_GET['R'] . "&last=" .$_GET['last'] . "&lastR=" .$_GET['lastR'] . "',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader(\"api-key\", \"082462e1-1d1b-41f7-95cf-bb0cc8e22aad\"); 
+                      },
                     success: function (msg) {
                         console.log(msg);
                         handle(msg);                  
@@ -39,6 +43,11 @@
                 });    
                         
            function handle(msg) {
+               if(msg===\"unauthorized\"){
+                    alert(\"nesprávny api-key\");
+                    return;
+               }
+               
                 lastPos = [];   
                 lastRs = [];
                 var arr = msg.split(\" \");       
@@ -167,14 +176,16 @@
                     for(var j=0;j<positions.length;j++)
                     {
                         pendullum.animate('left', 900*positions[j] ,{
-                            duration:4000,
+                            duration:3000,
                             onChange: canvas.renderAll.bind(canvas)});
                         var pi = Math.PI;
                         
                         var deg = angles[j] * (180/pi);
-                        bar.animate('angle', deg ,{
-                            duration:4000,
-                            onChange: canvas.renderAll.bind(canvas)});
+                        
+                          bar.angle = deg;
+//                        pendullum.getObjects()[1].animate('angle', deg ,{
+//                            duration:4000,
+//                            onChange: canvas.renderAll.bind(canvas)});
                        
                         
                         console.log(deg);
